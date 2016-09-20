@@ -1,0 +1,15 @@
+{
+  "name": "1tree",
+  "version": "0.1.0",
+  "description": "Functional API for traversing and manipulating tree structures",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Nik Coughlin <nrkn.com@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "jsdom": "^9.5.0",
+    "mocha": "^3.0.1"
+  }
+}
