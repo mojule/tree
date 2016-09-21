@@ -29,7 +29,7 @@ const manipulate = fns => {
   }
 
   const insertBefore = ( root, parentNode, childNode, referenceNode ) => {
-    if( referenceNode === null )
+    if( !referenceNode )
       return append( root, parentNode, childNode )
 
     if( root ) remove( root, childNode )

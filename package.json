@@ -1,6 +1,6 @@
 {
   "name": "1tree",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Functional API for traversing and manipulating tree structures",
   "main": "index.js",
   "scripts": {
@@ -17,13 +17,10 @@
     "url": "https://github.com/mojule/1tree.git"
   },
   "keywords": [
-    "tree", "node", "graph", "acyclic", "directed"
+    "tree", "api", "traverse", "traversal", "manipulate", "manipulation", "graph"
   ],
   "bugs": {
     "url": "https://github.com/mojule/1tree/issues"
-  },
-  "engines": {
-    "node": "6.3.0"
   },
   "homepage": "https://github.com/mojule/1tree#readme"
 }
