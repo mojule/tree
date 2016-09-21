@@ -32,6 +32,8 @@ const manipulate = fns => {
     if( referenceNode === null )
       return append( root, parentNode, childNode )
 
+    if( root ) remove( root, childNode )
+
     const referenceIndex = parentNode.children.indexOf( referenceNode )
 
     parentNode.children.splice( referenceIndex, 0, childNode )
