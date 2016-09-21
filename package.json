@@ -11,5 +11,19 @@
   "devDependencies": {
     "jsdom": "^9.5.0",
     "mocha": "^3.0.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mojule/1tree.git"
+  },
+  "keywords": [
+    "tree", "node", "graph", "acyclic", "directed"
+  ],
+  "bugs": {
+    "url": "https://github.com/mojule/1tree/issues"
+  },
+  "engines": {
+    "node": "6.3.0"
+  },
+  "homepage": "https://github.com/mojule/1tree#readme"
 }
