@@ -29,6 +29,9 @@ root.walk( n => console.log( n.value() ) )
 
 ## API
 
+The comment above each API method example is the function signature in
+[rtype](https://github.com/ericelliott/rtype) notation
+
 ### Basics
 
 Create a tree:
