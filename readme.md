@@ -65,7 +65,7 @@ For most of the examples we just use a string as the node's value.
 A contrived example using object literals:
 
 ```javascript
-const photos = tree({
+const root = tree({
   fileType: 'folder'
   name: 'Photos'
 })
