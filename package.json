@@ -1,6 +1,6 @@
 {
   "name": "1tree",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Functional API for traversing and manipulating tree structures",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,9 @@
   "author": "Nik Coughlin <nrkn.com@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
     "jsdom": "^9.5.0",
     "mocha": "^3.0.1"
   },
@@ -17,7 +20,13 @@
     "url": "https://github.com/mojule/1tree.git"
   },
   "keywords": [
-    "tree", "api", "traverse", "traversal", "manipulate", "manipulation", "graph"
+    "tree",
+    "api",
+    "traverse",
+    "traversal",
+    "manipulate",
+    "manipulation",
+    "graph"
   ],
   "bugs": {
     "url": "https://github.com/mojule/1tree/issues"

@@ -25,15 +25,13 @@ const wrapFn = ( fn, def, root, currentNode, wrapNode ) => {
     callback: args => {
       const cb = args[ 0 ]
 
-      const wrapped = function(){
-        const cbArgs = Array.from( arguments )
+      const wrapped = ( ...args ) => {
+        args[ 0 ] = wrapNode( args[ 0 ] )
 
-        cbArgs[ 0 ] = wrapNode( cbArgs[ 0 ] )
+        if( args[ 1 ] )
+          args[ 1 ] = wrapNode( args[ 1 ] )
 
-        if( cbArgs[ 1 ] )
-          cbArgs[ 1 ] = wrapNode( cbArgs[ 1 ] )
-
-        return cb.apply( cb, cbArgs )
+        return cb.apply( cb, args )
       }
 
       args[ 0 ] = wrapped
@@ -44,15 +42,13 @@ const wrapFn = ( fn, def, root, currentNode, wrapNode ) => {
     rootCallback: args => {
       const cb = args[ 0 ]
 
-      const wrapped = function(){
-        const cbArgs = Array.from( arguments )
+      const wrapped = ( ...args ) => {
+        args[ 0 ] = wrapNode( args[ 0 ] )
 
-        cbArgs[ 0 ] = wrapNode( cbArgs[ 0 ] )
+        if( args[ 1 ] )
+          args[ 1 ] = wrapNode( args[ 1 ] )
 
-        if( cbArgs[ 1 ] )
-          cbArgs[ 1 ] = wrapNode( cbArgs[ 1 ] )
-
-        return cb.apply( cb, cbArgs )
+        return cb.apply( cb, args )
       }
 
       args[ 0 ] = wrapped
@@ -85,13 +81,13 @@ const wrapFn = ( fn, def, root, currentNode, wrapNode ) => {
     default: result => result
   }
 
-  const wrapped = function(){
+  const wrapped = ( ...args ) => {
     const argType = def.argType || 'default'
     const count = def.extraNodeArgs || 0
     const resultType = def.returnType || 'default'
 
-    const args = setArgs[ argType ]( Array.from( arguments ), count )
-    const result = fn.apply( fn, args )
+    const fnArgs = setArgs[ argType ]( args, count )
+    const result = fn.apply( fn, fnArgs )
 
     return setResult[ resultType ]( result )
   }
