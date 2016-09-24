@@ -1,17 +1,17 @@
 'use strict'
 
-const serializer = tree => {
+const serializer = fn => {
   const serialize = node => ({
-    value: tree.value( node ),
-    children: tree.getChildren( node ).map( serialize )
+    value: fn.value( node ),
+    children: fn.getChildren( node ).map( serialize )
   })
 
   const deserialize = obj => {
-    const node = tree.createNode( obj.value )
+    const node = fn.createNode( obj.value )
 
     if( Array.isArray( obj.children ) ){
       obj.children.forEach( child => {
-        tree.append( null, node, deserialize( child ) )
+        fn.append( null, node, deserialize( child ) )
       })
     }
 
@@ -20,7 +20,5 @@ const serializer = tree => {
 
   return { serialize, deserialize }
 }
-
-serializer.requirements = [ 'value', 'getChildren', 'createNode', 'append' ]
 
 module.exports = serializer

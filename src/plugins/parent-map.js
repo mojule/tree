@@ -1,21 +1,12 @@
 'use strict'
 
-const parentMap = tree => {
+const parentMap = fn => {
   const parents = new Map()
 
   const original = {
-    append: tree.append,
-    insertBefore: tree.insertBefore,
-    remove: tree.remove,
-    getParent: tree.getParent
-  }
-
-  const append = ( root, parentNode, childNode ) => {
-    const value = original.append( root, parentNode, childNode )
-
-    parents.set( childNode, parentNode )
-
-    return value
+    insertBefore: fn.insertBefore,
+    remove: fn.remove,
+    getParent: fn.getParent
   }
 
   const insertBefore = ( root, parentNode, childNode, referenceNode ) => {
@@ -45,9 +36,18 @@ const parentMap = tree => {
     return parent
   }
 
-  return { append, insertBefore, remove, getParent }
-}
+  const wrapped = { insertBefore, remove, getParent }
 
-parentMap.requirements = [ 'append', 'insertBefore', 'remove' ]
+  Object.keys( wrapped ).forEach( fname => {
+    wrapped[ fname ].def = Object.assign( 
+      { 
+        wraps: original[ fname ] 
+      }, 
+      original[ fname ].def 
+    )
+  })
+
+  return Object.assign( {}, fn, wrapped )
+}
 
 module.exports = parentMap
