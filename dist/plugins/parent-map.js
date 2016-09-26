@@ -1,53 +1,52 @@
 'use strict';
 
-var parentMap = function parentMap(tree) {
+var parentMap = function parentMap(fn) {
   var parents = new Map();
 
   var original = {
-    append: tree.append,
-    insertBefore: tree.insertBefore,
-    remove: tree.remove,
-    getParent: tree.getParent
+    insertBefore: fn.insertBefore,
+    remove: fn.remove,
+    getParent: fn.getParent
   };
 
-  var append = function append(root, parentNode, childNode) {
-    var value = original.append(root, parentNode, childNode);
+  var insertBefore = function insertBefore(fn, root, parentNode, childNode, referenceNode) {
+    var value = original.insertBefore(fn, root, parentNode, childNode, referenceNode);
 
     parents.set(childNode, parentNode);
 
     return value;
   };
 
-  var insertBefore = function insertBefore(root, parentNode, childNode, referenceNode) {
-    var value = original.insertBefore(root, parentNode, childNode, referenceNode);
-
-    parents.set(childNode, parentNode);
-
-    return value;
-  };
-
-  var remove = function remove(root, node) {
-    var value = original.remove(root, node);
+  var remove = function remove(fn, root, node) {
+    var value = original.remove(fn, root, node);
 
     parents.set(node, null);
 
     return value;
   };
 
-  var getParent = function getParent(root, node) {
+  var getParent = function getParent(fn, root, node) {
     var parent = parents.get(node);
 
     if (!parent && original.getParent) {
-      parent = original.getParent(root, node);
+      parent = original.getParent(fn, root, node);
       parents.set(node, parent);
     }
 
     return parent;
   };
 
-  return { append: append, insertBefore: insertBefore, remove: remove, getParent: getParent };
-};
+  var wrapped = { insertBefore: insertBefore, remove: remove, getParent: getParent };
 
-parentMap.requirements = ['append', 'insertBefore', 'remove'];
+  Object.keys(wrapped).forEach(function (fname) {
+    wrapped[fname].def = Object.assign({
+      wraps: original[fname]
+    }, original[fname].def);
+
+    wrapped[fname].def.categories.push('parentMap', 'plugin');
+  });
+
+  return Object.assign(fn, wrapped);
+};
 
 module.exports = parentMap;

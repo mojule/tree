@@ -1,28 +1,40 @@
 'use strict';
 
-var serializer = function serializer(tree) {
+var serializer = function serializer(fn) {
   var serialize = function serialize(node) {
     return {
-      value: tree.value(node),
-      children: tree.getChildren(node).map(serialize)
+      value: fn.value(node),
+      children: fn.getChildren(node).map(serialize)
     };
   };
 
+  serialize.def = {
+    argTypes: ['node'],
+    returnType: 'object',
+    requires: ['value', 'getChildren'],
+    categories: ['serializer', 'plugin']
+  };
+
   var deserialize = function deserialize(obj) {
-    var node = tree.createNode(obj.value);
+    var parentNode = fn.createNode(obj.value);
 
     if (Array.isArray(obj.children)) {
       obj.children.forEach(function (child) {
-        tree.append(null, node, deserialize(child));
+        fn.append(fn, null, parentNode, deserialize(child));
       });
     }
 
-    return node;
+    return parentNode;
   };
 
-  return { serialize: serialize, deserialize: deserialize };
-};
+  deserialize.def = {
+    argTypes: ['object'],
+    returnType: 'node',
+    requires: ['createNode', 'append'],
+    categories: ['serializer', 'plugin']
+  };
 
-serializer.requirements = ['value', 'getChildren', 'createNode', 'append'];
+  return Object.assign(fn, { serialize: serialize, deserialize: deserialize });
+};
 
 module.exports = serializer;

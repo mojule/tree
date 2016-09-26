@@ -1,7 +1,7 @@
 'use strict'
 
-const biology = fn => {
-  const animalia = fn( 'Animalia' )
+const biology = tree => {
+  const animalia = tree( 'Animalia' )
 
   const chordate = animalia.createNode( 'Chordate' )
   animalia.append( chordate )
