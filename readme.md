@@ -15,6 +15,8 @@
 
 ## Quick start
 
+`npm install 1tree --save`
+
 Create a basic tree where each node is just a string:
 
 ```javascript
