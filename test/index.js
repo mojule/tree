@@ -1,10 +1,16 @@
 'use strict'
 
 const assert = require( 'assert' )
-const tree = require( '../index' )
+const tree = require( '../dist' )
 const biologyTree = require( './fixtures/biology' )
 
 describe( 'default tree', () => {
+  it( 'should create a tree', () => {
+    const $ = tree( "Root" )
+
+    assert( $.getChildren )
+  })
+
   it( 'should get value', () => {
     const root = biologyTree( tree )
 
@@ -433,98 +439,98 @@ describe( 'default tree', () => {
 
 describe( 'dom adapter', () => {
   const document = require( 'jsdom' ).jsdom()
-  const window = document.defaultView
-
   const domAdapter = require( './fixtures/dom' )
+
   const domTree = domAdapter( document )
 
-  const dom = value => {
-    const root = domTree.createNode( value )
-    return domTree.api( root )
-  }
-
-  const getBody = root => domTree.find( root, n => {
-    const value = domTree.value( n )
+  const getBody = root => root.find( n => {
+    const value = n.value()
 
     return value.nodeType === 1 && value.tagName === 'BODY'
   })
 
-  const h = tagName => domTree.createNode({
+  const h = tagName => domTree({
     nodeType: 1,
     tagName
   })
 
-  const doc = title => domTree.createNode({
+  const doc = title => domTree({
     nodeType: 9,
     isPrepopulated: true,
     title
   })
 
   it( 'should create a node', () => {
-    const div = h( 'div' )
+    const div = h( 'div' ).get()
 
     assert.equal( '<div></div>', div.outerHTML )
   })
 
   it( 'should find a node', () => {
-    const root = doc( 'Test' )
-    const body = getBody( root )
+    const $ = doc( 'Test' )
+    const body = getBody( $ ).get()
 
     assert.equal( body.tagName, 'BODY' )
   })
 
   it( 'should append a child', () =>{
-    const root = doc( 'Test' )
-    const body = getBody( root )
-    const div = h( 'div' )
+    const $ = doc( 'Test' )
+    const $body = getBody( $ )
+    const $div = h( 'div' )
 
-    domTree.append( root, body, div )
+    $body.append( $div )
+
+    const body = $body.get()
 
     assert.equal( body.innerHTML, '<div></div>' )
   })
 
   it( 'should insert a child', () =>{
-    const root = doc( 'Test' )
-    const body = getBody( root )
-    const div = h( 'div' )
-    const p = h( 'p' )
+    const $ = doc( 'Test' )
+    const $body = getBody( $ )
+    const $div = h( 'div' )
+    const $p = h( 'p' )
 
-    domTree.append( root, body, div )
-    domTree.append( root, body, p )
+    $body.append( $div )
+    $body.append( $p )
 
-    const span = h( 'span' )
+    const $span = h( 'span' )
 
-    domTree.insertBefore( root, body, span, p )
+    $body.insertBefore( $span, $p )
+
+    const body = $body.get()
 
     assert.equal( body.innerHTML, '<div></div><span></span><p></p>' )
   })
 
   it( 'should remove a child', () =>{
-    const root = doc( 'Test' )
+    const $ = doc( 'Test' )
 
-    const body = getBody( root )
+    const $body = getBody( $ )
 
-    const div = h( 'div' )
-    const p = h( 'p' )
+    const $div = h( 'div' )
+    const $p = h( 'p' )
 
-    domTree.append( root, body, div )
-    domTree.append( root, body, p )
+    $body.append( $div )
+    $body.append( $p )
+
+    const body = $body.get()
 
     assert.equal( body.innerHTML, '<div></div><p></p>' )
 
-    domTree.remove( root, p )
+    $p.remove()
 
     assert.equal( body.innerHTML, '<div></div>' )
   })
 
   it( 'should set element attributes', () => {
-    const div = h( 'div' )
+    const $div = h( 'div' )
 
-    domTree.value( div, { attributes: [{ name: 'id', value: 'test' }] } )
+    $div.value({ attributes: [{ name: 'id', value: 'test' }] })
 
-    assert.equal( '<div id="test"></div>', div.outerHTML )
+    assert.equal( '<div id="test"></div>', $div.get().outerHTML )
 
-    const value = domTree.value( div )
+    const value = $div.value()
 
     assert.equal( value.nodeType, 1 )
     assert.equal( value.tagName, 'DIV' )
@@ -532,91 +538,93 @@ describe( 'dom adapter', () => {
   })
 
   it( 'should create a text node', () => {
-    const text = domTree.createNode({
+    const $text = domTree({
       nodeType: 3,
       nodeValue: 'Hello, world!'
     })
 
+    const text = $text.get()
+
     assert.equal( text.nodeType, 3 )
     assert.equal( text.nodeValue, 'Hello, world!' )
 
-    domTree.value( text, { nodeValue: 'Test' } )
+    $text.value({ nodeValue: 'Test' })
 
-    const value = domTree.value( text )
+    const value = $text.value()
 
     assert.equal( value.nodeType, 3 )
     assert.equal( value.nodeValue, 'Test' )
   })
 
   it( 'should create a comment node', () => {
-    const comment = domTree.createNode({
+    const $comment = domTree({
       nodeType: 8,
       nodeValue: 'Hello, world!'
     })
 
-    const div = h( 'div' )
+    const $div = h( 'div' )
 
-    domTree.append( null, div, comment )
+    $div.append( $comment )
 
-    assert.equal( div.innerHTML, '<!--Hello, world!-->' )
+    assert.equal( $div.get().innerHTML, '<!--Hello, world!-->' )
 
-    domTree.value( comment, { nodeValue: 'Test' } )
+    $comment.value({ nodeValue: 'Test' })
 
-    const value = domTree.value( comment )
+    const value = $comment.value()
 
     assert.equal( value.nodeType, 8 )
     assert.equal( value.nodeValue, 'Test' )
-    assert.equal( div.innerHTML, '<!--Test-->' )
+    assert.equal( $div.get().innerHTML, '<!--Test-->' )
   })
 
   it( 'should create a document', () => {
-    const root = doc( 'Test' )
+    const $ = doc( 'Test' )
 
-    const documentElement = root.documentElement
+    const documentElement = $.get().documentElement
 
     assert.equal( '<html><head><title>Test</title></head><body></body></html>', documentElement.outerHTML )
 
-    const value = domTree.value( root )
+    const value = $.value()
 
     assert.equal( value.nodeType, 9 )
   })
 
   it( 'should create a document type', () => {
-    const doctype = domTree.createNode({
+    const $doctype = domTree({
       nodeType: 10,
       publicId: 'html'
     })
 
-    assert.equal( doctype.publicId, 'html' )
+    assert.equal( $doctype.get().publicId, 'html' )
   })
 
   it( 'should create a document fragment', () => {
-    const fragment = domTree.createNode({
+    const $fragment = domTree({
       nodeType: 11
     })
 
-    const div = h( 'div' )
-    const span = h( 'span' )
+    const $div = h( 'div' )
+    const $span = h( 'span' )
 
-    domTree.append( null, fragment, span )
-    domTree.append( null, div, fragment )
+    $fragment.append( $span )
+    $div.append( $fragment )
 
-    assert.equal( '<div><span></span></div>', div.outerHTML )
+    assert.equal( '<div><span></span></div>', $div.get().outerHTML )
   })
 
   it( 'should be able to serialize to and from json', () => {
-    const root = doc( 'Test' )
+    const $ = doc( 'Test' )
 
-    const serialized = domTree.serialize( root )
+    const serialized = $.serialize()
 
     const json = JSON.stringify( serialized )
 
     const obj = JSON.parse( json )
 
-    const deserialized = domTree.deserialize( obj )
+    const $deserialized = $.deserialize( obj )
 
-    const rootHtml = getBody( root ).outerHTML
-    const deserializedHtml = getBody( deserialized ).outerHTML
+    const rootHtml = getBody( $ ).get().outerHTML
+    const deserializedHtml = getBody( $deserialized ).get().outerHTML
 
     assert.equal( rootHtml, deserializedHtml )
   })

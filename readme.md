@@ -43,6 +43,12 @@ Create a node:
 const node = root.createNode( value )
 ```
 
+Get the node's underlying implementation:
+
+```javascript
+const realNode = node.get()
+```
+
 Get a node's value:
 
 ```javascript
@@ -456,6 +462,18 @@ node.wrap( newParentNode )
 
 ### Miscellaneous
 
+#### get
+
+Gets the node's underlying implementation - for example when using the DOM
+adapter it would probably refer to an HTMLElement or similar
+
+```javascript
+// get() => Any
+const divElement = div.get()
+
+console.log( divElement.tagName ) // "div"
+```
+
 #### serialize
 
 Returns a single object containing the current node and all of its children,
@@ -509,9 +527,9 @@ const root = domTree( 'My page title' )
 You can create adapters that allow you to use the API over any tree-like backing
 structure.
 
-You need to provide between 1 and 6 functions for the adapter to work. If you
+You need to provide between 1 and 5 functions for the adapter to work. If you
 only provide `getChildren`, you will get the whole traversal API, but the
-manipulation API requires `append`, `insertBefore` and `remove`. The serializer
+manipulation API requires `insertBefore` and `remove`. The serializer
 functions require `value` and `createNode`.
 
 You can also provide implementations of other functions normally provided by the
@@ -522,6 +540,9 @@ These functions differ slightly from the consumer versions in the 1tree API in
 that they take more arguments (the API curries the extra arguments) - the
 signatures are shown here in [rtype](https://github.com/ericelliott/rtype) format:
 
+The `fn` argument will pass you in the tree API, so that you can call other API
+primitives from the ada
+
 ```
 getChildren( node: Node ) => [Node]
 /*
@@ -530,19 +551,18 @@ getChildren( node: Node ) => [Node]
   these to an array
 */
 
-append( rootNode: Node, currentNode: Node, newNode: Node ) => newNode: Node
-/*
-  You should remove the new node from it's current parent (if it has one) in the
-  underlying structure before adding it to the new parent
-*/
-
-insertBefore( rootNode: Node, currentNode: Node, newNode: Node, referenceNode: Node ) => newNode: Node
+insertBefore( fn: Object[Function], rootNode: Node, currentNode: Node, newNode: Node, referenceNode: Node ) => newNode: Node
 /*
   If referenceNode is not provided you should append the new node. As per the
-  append reference, you should remove the new node from it's current parent.
+  append reference, you should remove the new node from it's current parent
+  (eg. fn.remove( fn, root, newNode ) ).
 */
 
-remove( rootNode: Node, currentNode: Node ) => removedNode: Node
+remove( fn: Object[Function], rootNode: Node, currentNode: Node ) => removedNode: Node
+/*
+  fn is provided in case you need to for example, find the parent via
+  fn.getParent or etc.
+*/
 
 value( currentNode: Node, value?: Any ) => value: Any
 /*
@@ -573,15 +593,55 @@ value( currentNode: Node, value?: Any ) => value: Any
 
 For an example, [see the DOM adapter](./test/fixtures/dom.js)
 
+## plugins
+
+A plugin is implemented as a function that takes the current tree API and adds
+to it, deletes from it, wraps an existing function etc.
+
+### using a plugin
+
+```javascript
+const tree = require( '1tree' )
+const logPlugin = require( './log-plugin.js' )
+
+tree.plugin( logPlugin )
+
+const root = tree( 'Animalia' )
+
+root.log()
+```
+
+### implementing a plugin
+
+If your plugin attaches functions to the fn object, you should also attach a
+`def` object to each of those functions which provides some metadata so that
+your plugin can be used from a wrapped node. See the [defs folder](./src/defs)
+for examples of `def` in the built in functions.
+
+```javascript
+const logPlugin = fn => {
+  const log = node => {
+    console.log( fn.value( node ) )
+
+    return node
+  }
+
+  log.def = {
+    argTypes: [ 'node' ],
+    returnType: 'node',
+    requires: [ 'value' ],
+    categories: [ 'log-plugin', 'plugin' ]
+  }
+
+  fn.log = log
+
+  return fn
+}
+```
+
 ## future
-
-Expose the plugin api used internally in a way that is easy to use, like jQuery
-
-Need a way to know how to curry fns from user provided plugins, the fn-defs we
-use are a bit obscure, through rtype or similar? A JSON-schema def for the
-expected params/return type?
 
 How to traverse when nodes may require async or events?
 
-Can an adapter be built that wraps all function calls to be async where
-necessary using fn-defs or a similar technique?
+Can an adapter or plugin be built that wraps all function calls to be async
+where necessary using similar technique to the `wrap-nodes` plugin?

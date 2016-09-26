@@ -1,8 +1,6 @@
 'use strict'
 
 const tree = require( '../../index' )
-const adapter = tree.adapter
-const decorator = tree.plugin
 
 const createNodeMapper = document => {
   const nodeMapper = {
@@ -119,37 +117,32 @@ const value = ( node, value ) => {
   return valueMapper.get[ node.nodeType ]( node )
 }
 
-const domAdapter = ( document, plugins ) => {
-  plugins = Array.isArray( plugins ) ? plugins : []
+const getChildren = node => Array.from( node.childNodes )
 
+const getParent = ( fn, root, node ) => node.parentNode
+
+const insertBefore = ( fn, root, parentNode, childNode, referenceNode ) =>
+  parentNode.insertBefore( childNode, referenceNode )
+
+const remove = ( fn, root, node ) => node.remove()
+
+const domAdapter = document => {
   // createNode should allow no arg to be passed and default to doing something
   // sensible, in this case creating an empty document node
   const createNode = value => createNodeMapper( document )( value || { nodeType: 9 } )
 
-  const getChildren = node => Array.from( node.childNodes )
-
-  const getParent = node => node.parentNode
-
-  const append = ( root, parentNode, childNode ) => parentNode.appendChild( childNode )
-
-  const insertBefore = ( root, parentNode, childNode, referenceNode ) =>
-    parentNode.insertBefore( childNode, referenceNode )
-
-  const remove = ( root, node ) => node.remove()
-
-  const fns = adapter({
+  const adapter = {
     getChildren,
     getParent,
     createNode,
     value,
-    append,
     insertBefore,
     remove
-  })
+  }
 
-  decorator( fns, plugins )
+  const plugins = [ tree.plugins.serializer, tree.plugins.wrapNodes ]
 
-  return fns
+  return tree.adapter( adapter, plugins )
 }
 
 module.exports = domAdapter
