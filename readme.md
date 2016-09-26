@@ -9,6 +9,7 @@
 
 - extensive traversal and manipulation API (comparable to DOM or jQuery)
 - provide an adapter to any other tree structure by implementing a few simple functions and get the rest of the API for free
+- supports plugins to extend or modify functionality
 - small footprint, no external dependencies, fast
 - optimised for large graphs, full test suite
 
@@ -541,7 +542,7 @@ that they take more arguments (the API curries the extra arguments) - the
 signatures are shown here in [rtype](https://github.com/ericelliott/rtype) format:
 
 The `fn` argument will pass you in the tree API, so that you can call other API
-primitives from the ada
+primitives from your adapter:
 
 ```
 getChildren( node: Node ) => [Node]
@@ -553,8 +554,9 @@ getChildren( node: Node ) => [Node]
 
 insertBefore( fn: Object[Function], rootNode: Node, currentNode: Node, newNode: Node, referenceNode: Node ) => newNode: Node
 /*
-  If referenceNode is not provided you should append the new node. As per the
-  append reference, you should remove the new node from it's current parent
+  If referenceNode is not provided you should append the new node to the tail
+  end of the current node's children instead. You should remove the new node
+  from it's current parent if it already has one.
   (eg. fn.remove( fn, root, newNode ) ).
 */
 
