@@ -1,24 +1,24 @@
 'use strict'
 
 const assert = require( 'assert' )
-const tree = require( '../dist' )
+const Tree = require( '../src' )
 const biologyTree = require( './fixtures/biology' )
 
 describe( 'default tree', () => {
   it( 'should create a tree', () => {
-    const $ = tree( "Root" )
+    const root = Tree.createRoot( 'Root' )
 
-    assert( $.getChildren )
+    assert( root.getChildren )
   })
 
   it( 'should get value', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     assert.equal( root.value(), 'Animalia' )
   })
 
   it( 'should set value', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     root.value( 'Animals' )
 
@@ -26,7 +26,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get children', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const children = root.getChildren()
 
@@ -38,7 +38,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should walk', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     root.walk( ( node, parent, depth ) => {
       assert( typeof node.get === 'function' )
@@ -51,7 +51,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should find', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const human = root.find( n => n.value() === 'Human' )
 
@@ -59,7 +59,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get parent', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const human = root.find( n => n.value() === 'Human' )
 
@@ -70,7 +70,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get child at index', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const secondChild = root.childAt( 1 )
 
@@ -79,7 +79,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get first child', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const first = root.firstChild()
 
@@ -88,7 +88,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get last child', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const last = root.lastChild()
 
@@ -97,7 +97,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get next sibling', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const first = root.firstChild()
     const next = first.nextSibling()
@@ -107,7 +107,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get previous sibling', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const last = root.lastChild()
     const prev = last.previousSibling()
@@ -117,7 +117,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should find closest ancestor matching predicate', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const human = root.find( n => n.value() === 'Human' )
 
@@ -128,7 +128,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get all ancestors', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const human = root.find( n => n.value() === 'Human' )
 
@@ -140,7 +140,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get siblings', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const first = root.firstChild()
 
@@ -153,7 +153,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should find all', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const h = root.findAll( n => n.value().charAt( 0 ) === 'H' )
 
@@ -163,7 +163,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should get descendents', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const hominidae = root.find( n => n.value() === 'Hominidae' )
 
@@ -176,7 +176,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should test contains', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const hominidae = root.find( n => n.value() === 'Hominidae' )
 
@@ -185,7 +185,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should test has children', () => {
-    const root = biologyTree( tree )
+    const root = biologyTree( Tree )
 
     const hominidae = root.find( n => n.value() === 'Hominidae' )
     const human = root.find( n => n.value() === 'Human' )
@@ -195,14 +195,14 @@ describe( 'default tree', () => {
   })
 
   it( 'should create a node', () => {
-    const node = tree( 'New Node' )
+    const node = Tree.createRoot( 'New Node' )
 
     assert( typeof node.get === 'function' )
     assert.equal( node.value(), 'New Node' )
   })
 
   it( 'should append a child', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
     const node = root.createNode( 'New Node' )
 
     root.append( node )
@@ -225,7 +225,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should insert before', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const b = root.createNode( 'B' )
@@ -243,7 +243,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should remove', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const b = root.createNode( 'B' )
@@ -264,7 +264,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should replace child', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const b = root.createNode( 'B' )
@@ -282,7 +282,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should insert at', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const b = root.createNode( 'B' )
@@ -297,7 +297,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should insert after', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const b = root.createNode( 'B' )
@@ -312,7 +312,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should remove at index', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const b = root.createNode( 'B' )
@@ -328,7 +328,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should empty a node', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const b = root.createNode( 'B' )
@@ -343,7 +343,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should prepend a node', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const b = root.createNode( 'B' )
@@ -358,7 +358,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should unwrap a node', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const bWrapper = root.createNode( 'B Wrapper' )
@@ -377,7 +377,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should wrap a node', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const bChild = root.createNode( 'B Child' )
@@ -395,7 +395,7 @@ describe( 'default tree', () => {
   })
 
   it( 'should serialize', () => {
-    const root = tree( 'Root' )
+    const root = Tree.createRoot( 'Root' )
 
     const a = root.createNode( 'A' )
     const b = root.createNode( 'B' )
@@ -441,7 +441,7 @@ describe( 'dom adapter', () => {
   const document = require( 'jsdom' ).jsdom()
   const domAdapter = require( './fixtures/dom' )
 
-  const domTree = domAdapter( document )
+  const DomTree = domAdapter( document )
 
   const getBody = root => root.find( n => {
     const value = n.value()
@@ -449,12 +449,12 @@ describe( 'dom adapter', () => {
     return value.nodeType === 1 && value.tagName === 'BODY'
   })
 
-  const h = tagName => domTree({
+  const h = tagName => DomTree.createRoot({
     nodeType: 1,
     tagName
   })
 
-  const doc = title => domTree({
+  const doc = title => DomTree.createRoot({
     nodeType: 9,
     isPrepopulated: true,
     title
@@ -538,7 +538,7 @@ describe( 'dom adapter', () => {
   })
 
   it( 'should create a text node', () => {
-    const $text = domTree({
+    const $text = DomTree.createRoot({
       nodeType: 3,
       nodeValue: 'Hello, world!'
     })
@@ -557,7 +557,7 @@ describe( 'dom adapter', () => {
   })
 
   it( 'should create a comment node', () => {
-    const $comment = domTree({
+    const $comment = DomTree.createRoot({
       nodeType: 8,
       nodeValue: 'Hello, world!'
     })
@@ -590,7 +590,7 @@ describe( 'dom adapter', () => {
   })
 
   it( 'should create a document type', () => {
-    const $doctype = domTree({
+    const $doctype = DomTree.createRoot({
       nodeType: 10,
       publicId: 'html'
     })
@@ -599,7 +599,7 @@ describe( 'dom adapter', () => {
   })
 
   it( 'should create a document fragment', () => {
-    const $fragment = domTree({
+    const $fragment = DomTree.createRoot({
       nodeType: 11
     })
 

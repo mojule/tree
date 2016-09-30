@@ -88,11 +88,7 @@ const wrapNodes = fn => {
     return wrapped
   }
 
-  const createTree = value => {
-    const root = fn.createNode( value )
-
-    return wrappedNode( root, root )
-  }
+  const createTree = root => wrappedNode( root, root )
 
   createTree.def = {
     argTypes: [ 'nodeValue' ],

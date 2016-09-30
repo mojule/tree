@@ -120,9 +120,7 @@ var wrapNodes = function wrapNodes(_fn) {
     return wrapped;
   };
 
-  var createTree = function createTree(value) {
-    var root = _fn.createNode(value);
-
+  var createTree = function createTree(root) {
     return wrappedNode(root, root);
   };
 

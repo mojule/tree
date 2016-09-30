@@ -1,7 +1,7 @@
 'use strict'
 
-const biology = tree => {
-  const animalia = tree( 'Animalia' )
+const biology = Tree => {
+  const animalia = Tree.createRoot( 'Animalia' )
 
   const chordate = animalia.createNode( 'Chordate' )
   animalia.append( chordate )

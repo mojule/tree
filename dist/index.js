@@ -12,18 +12,14 @@ var wrapNodes = require('./plugins/wrap-nodes');
 var treeFactory = function treeFactory(adapter, plugins) {
   var fn = fnFactory(adapter);
 
-  // create wrapped API
-  var tree = function tree(value) {
-    if (fn.createTree) {
-      return fn.createTree(value);
-    }
-
-    return fn.createNode(value);
-  };
-
   if (Array.isArray(plugins)) plugins.forEach(function (plugin) {
     return plugin(fn);
   });
+
+  // create wrapped API
+  var Tree = function Tree(root) {
+    return fn.createTree(root);
+  };
 
   var fnames = Object.keys(fn);
 
@@ -32,7 +28,7 @@ var treeFactory = function treeFactory(adapter, plugins) {
     var def = func.def || {};
     var argTypes = Array.isArray(def.argTypes) ? def.argTypes : [];
 
-    tree[fname] = function () {
+    Tree[fname] = function () {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
@@ -45,14 +41,17 @@ var treeFactory = function treeFactory(adapter, plugins) {
     };
   });
 
-  tree.fn = fn;
-  tree.adapter = treeFactory;
-  tree.plugin = function (plugin) {
+  Tree.createRoot = function (value) {
+    return Tree(Tree.createNode(value));
+  };
+  Tree.fn = fn;
+  Tree.adapter = treeFactory;
+  Tree.plugin = function (plugin) {
     return plugin(fn);
   };
-  tree.plugins = { parentMap: parentMap, serializer: serializer, wrapNodes: wrapNodes };
+  Tree.plugins = { parentMap: parentMap, serializer: serializer, wrapNodes: wrapNodes };
 
-  return tree;
+  return Tree;
 };
 
 module.exports = treeFactory(defaultAdapter, [parentMap, serializer, wrapNodes]);

@@ -20,10 +20,10 @@
 Create a basic tree where each node is just a string:
 
 ```javascript
-const tree = require( '1tree' )
+const Tree = require( '1tree' )
 
-const root = tree( 'Animalia' )
-const chordata = tree.createNode( 'Chordata' )
+const root = Tree.createRoot( 'Animalia' )
+const chordata = Tree.createNode( 'Chordata' )
 
 root.append( chordata )
 
@@ -37,19 +37,19 @@ root.walk( n => console.log( n.value() ) )
 Create a tree:
 
 ```javascript
-const root = tree( rootValue )
+const root = Tree.createRoot( rootValue )
 ```
 
 Create a node:
 
 ```javascript
-const node = root.createNode( value )
+const node = Tree.createNode( value )
 ```
 
 Get the node's underlying implementation:
 
 ```javascript
-const realNode = node.get()
+const rawNode = node.get()
 ```
 
 Get a node's value:
@@ -74,12 +74,12 @@ For most of the examples we just use a string as the node's value.
 A contrived example using object literals:
 
 ```javascript
-const root = tree({
+const root = Tree.createRoot({
   fileType: 'folder'
   name: 'Photos'
 })
 
-const selfie = root.createNode({
+const selfie = Tree.createNode({
   fileType: 'file',
   name: 'selfie.jpg'
 })
@@ -515,14 +515,14 @@ Takes an object of the following form and returns a node:
 // deserialize( obj: Object ) => Node
 
 const obj = db.load( 'myTree' )
-const node = tree.deserialize( obj )
+const node = Tree.deserialize( obj )
 ```
 
 ## adapters
 
 ```javascript
-const domTree = tree.adapter( domAdapter )
-const root = domTree( 'My page title' )
+const Dom = Tree.adapter( domAdapter )
+const root = Dom.createRoot( 'My page title' )
 ```
 
 ## creating an adapter
@@ -605,12 +605,12 @@ to it, deletes from it, wraps an existing function etc.
 ### using a plugin
 
 ```javascript
-const tree = require( '1tree' )
+const Tree = require( '1tree' )
 const logPlugin = require( './log-plugin.js' )
 
-tree.plugin( logPlugin )
+Tree.plugin( logPlugin )
 
-const root = tree( 'Animalia' )
+const root = Tree.createRoot( 'Animalia' )
 
 root.log()
 ```

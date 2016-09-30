@@ -12,17 +12,11 @@ const wrapNodes = require( './plugins/wrap-nodes' )
 const treeFactory = ( adapter, plugins ) => {
   const fn = fnFactory( adapter )
 
-  // create wrapped API
-  const tree = value => {
-    if( fn.createTree ){
-      return fn.createTree( value )
-    }
-
-    return fn.createNode( value )
-  }
-
   if( Array.isArray( plugins ) )
     plugins.forEach( plugin => plugin( fn ) )
+
+  // create wrapped API
+  const Tree = root => fn.createTree( root )
 
   const fnames = Object.keys( fn )
 
@@ -31,7 +25,7 @@ const treeFactory = ( adapter, plugins ) => {
     const def = func.def || {}
     const argTypes = Array.isArray( def.argTypes ) ? def.argTypes : []
 
-    tree[ fname ] = ( ...args ) => {
+    Tree[ fname ] = ( ...args ) => {
       if( argTypes.includes( 'fn' ) ){
         return func( fn, ...args )
       }
@@ -40,12 +34,13 @@ const treeFactory = ( adapter, plugins ) => {
     }
   })
 
-  tree.fn = fn
-  tree.adapter = treeFactory
-  tree.plugin = plugin => plugin( fn )
-  tree.plugins = { parentMap, serializer, wrapNodes }
+  Tree.createRoot = value => Tree( Tree.createNode( value ) )
+  Tree.fn = fn
+  Tree.adapter = treeFactory
+  Tree.plugin = plugin => plugin( fn )
+  Tree.plugins = { parentMap, serializer, wrapNodes }
 
-  return tree
+  return Tree
 }
 
 module.exports = treeFactory( defaultAdapter, [ parentMap, serializer, wrapNodes ] )

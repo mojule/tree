@@ -1,6 +1,6 @@
 'use strict'
 
-const tree = require( '../../index' )
+const Tree = require( '../../index' )
 
 const createNodeMapper = document => {
   const nodeMapper = {
@@ -140,9 +140,9 @@ const domAdapter = document => {
     remove
   }
 
-  const plugins = [ tree.plugins.serializer, tree.plugins.wrapNodes ]
+  const plugins = [ Tree.plugins.serializer, Tree.plugins.wrapNodes ]
 
-  return tree.adapter( adapter, plugins )
+  return Tree.adapter( adapter, plugins )
 }
 
 module.exports = domAdapter
