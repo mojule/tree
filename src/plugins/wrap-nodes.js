@@ -67,6 +67,11 @@ const wrapNodes = fn => {
     let result = func( ...curried )
 
     if( def.returnType === 'node' ){
+      // more elegant way of handling than hard coding?
+      if( fname === 'getParent' && !result ){
+        return result
+      }
+
       result = wrappedNode( root, result )
     } else if( def.returnType === '[node]' ){
       result = result.map( n => wrappedNode( root, n ) )

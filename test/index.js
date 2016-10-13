@@ -69,6 +69,19 @@ describe( 'default tree', () => {
     assert( parent.value() === 'Sapiens' )
   })
 
+  it( 'should not wrap result of parent at root', () => {
+    const root = biologyTree( Tree )
+
+    const human = root.find( n => n.value() === 'Human' )
+
+    let node = human
+    while( node ){
+      node = node.getParent()
+    }
+
+    assert( true )
+  })
+
   it( 'should get child at index', () => {
     const root = biologyTree( Tree )
 
