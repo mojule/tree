@@ -92,11 +92,6 @@ var wrapNodes = function wrapNodes(_fn) {
       var result = func.apply(undefined, _toConsumableArray(curried));
 
       if (def.returnType === 'node') {
-        // more elegant way of handling than hard coding?
-        if (fname === 'getParent' && !result) {
-          return result;
-        }
-
         result = wrappedNode(root, result);
       } else if (def.returnType === '[node]') {
         result = result.map(function (n) {
@@ -109,6 +104,8 @@ var wrapNodes = function wrapNodes(_fn) {
   };
 
   var wrappedNode = function wrappedNode(root, node) {
+    if (node === null || node === undefined) return node;
+
     var wrapped = fnames.reduce(function (wrappedNode, fname) {
       wrappedNode[fname] = wrappedFn(root, node, fname);
 
