@@ -1,6 +1,6 @@
 {
   "name": "1tree",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Functional API for traversing and manipulating tree structures",
   "main": "index.js",
   "scripts": {

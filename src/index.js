@@ -5,6 +5,7 @@ require( './polyfills' )
 const defaultAdapter = require( './adapter/default' )
 const fnFactory = require( './fn-factory' )
 
+const meta = require( './plugins/meta' )
 const parentMap = require( './plugins/parent-map' )
 const serializer = require( './plugins/serializer' )
 const wrapNodes = require( './plugins/wrap-nodes' )
@@ -38,9 +39,9 @@ const treeFactory = ( adapter, plugins ) => {
   Tree.fn = fn
   Tree.adapter = treeFactory
   Tree.plugin = plugin => plugin( fn )
-  Tree.plugins = { parentMap, serializer, wrapNodes }
+  Tree.plugins = { parentMap, serializer, meta, wrapNodes }
 
   return Tree
 }
 
-module.exports = treeFactory( defaultAdapter, [ parentMap, serializer, wrapNodes ] )
+module.exports = treeFactory( defaultAdapter, [ parentMap, serializer, meta, wrapNodes ] )

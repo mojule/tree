@@ -5,6 +5,7 @@ require('./polyfills');
 var defaultAdapter = require('./adapter/default');
 var fnFactory = require('./fn-factory');
 
+var meta = require('./plugins/meta');
 var parentMap = require('./plugins/parent-map');
 var serializer = require('./plugins/serializer');
 var wrapNodes = require('./plugins/wrap-nodes');
@@ -49,9 +50,9 @@ var treeFactory = function treeFactory(adapter, plugins) {
   Tree.plugin = function (plugin) {
     return plugin(fn);
   };
-  Tree.plugins = { parentMap: parentMap, serializer: serializer, wrapNodes: wrapNodes };
+  Tree.plugins = { parentMap: parentMap, serializer: serializer, meta: meta, wrapNodes: wrapNodes };
 
   return Tree;
 };
 
-module.exports = treeFactory(defaultAdapter, [parentMap, serializer, wrapNodes]);
+module.exports = treeFactory(defaultAdapter, [parentMap, serializer, meta, wrapNodes]);

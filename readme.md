@@ -518,6 +518,35 @@ const obj = db.load( 'myTree' )
 const node = Tree.deserialize( obj )
 ```
 
+#### clone
+
+Clones a node - requires that `value` is JSON-serializable. Returns a new node
+with the same value and children as the original node, but the entire graph is
+a new instance.
+
+```javascript
+// clone() => clonedNode: Node
+
+const cloned = node.clone()
+```
+
+#### meta
+
+Store or retrieve metadata about a node that isn't persisted, eg doesn't change
+the underlying value of the node. Useful for storing temporary runtime
+information, like when you're visualising a tree in the browser and allow the
+user to collapse or expand nodes
+
+```javascript
+// meta( name:string, value?:any ) => value:any
+
+//set
+node.meta( 'isCollapsed', true )
+
+//get
+console.log( node.meta( 'isCollapsed' ) )
+```
+
 ## adapters
 
 ```javascript

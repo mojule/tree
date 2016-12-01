@@ -1,5 +1,9 @@
 'use strict';
 
+var cloneObj = function cloneObj(obj) {
+  return JSON.parse(JSON.stringify(obj));
+};
+
 var serializer = function serializer(fn) {
   var serialize = function serialize(node) {
     return {
@@ -34,7 +38,18 @@ var serializer = function serializer(fn) {
     categories: ['serializer', 'plugin']
   };
 
-  return Object.assign(fn, { serialize: serialize, deserialize: deserialize });
+  var clone = function clone(fn, node) {
+    return fn.deserialize(cloneObj(fn.serialize(node)));
+  };
+
+  clone.def = {
+    argTypes: ['fn', 'node'],
+    returnType: 'node',
+    requires: ['serialize', 'deserialize'],
+    categories: ['clone', 'plugin']
+  };
+
+  return Object.assign(fn, { serialize: serialize, deserialize: deserialize, clone: clone });
 };
 
 module.exports = serializer;

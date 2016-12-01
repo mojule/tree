@@ -1,5 +1,7 @@
 'use strict'
 
+const cloneObj = obj => JSON.parse( JSON.stringify( obj ) )
+
 const serializer = fn => {
   const serialize = node => ({
     value: fn.value( node ),
@@ -32,7 +34,17 @@ const serializer = fn => {
     categories: [ 'serializer', 'plugin' ]
   }
 
-  return Object.assign( fn, { serialize, deserialize } )
+  const clone = ( fn, node ) =>
+    fn.deserialize( cloneObj( fn.serialize( node ) ) )
+
+  clone.def = {
+    argTypes: [ 'fn', 'node' ],
+    returnType: 'node',
+    requires: [ 'serialize', 'deserialize' ],
+    categories: [ 'clone', 'plugin' ]
+  }
+
+  return Object.assign( fn, { serialize, deserialize, clone } )
 }
 
 module.exports = serializer
