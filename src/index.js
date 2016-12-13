@@ -9,6 +9,7 @@ const meta = require( './plugins/meta' )
 const parentMap = require( './plugins/parent-map' )
 const serializer = require( './plugins/serializer' )
 const wrapNodes = require( './plugins/wrap-nodes' )
+const accepts = require( './plugins/accepts' )
 
 const treeFactory = ( adapter, plugins ) => {
   const fn = fnFactory( adapter )
@@ -39,9 +40,12 @@ const treeFactory = ( adapter, plugins ) => {
   Tree.fn = fn
   Tree.adapter = treeFactory
   Tree.plugin = plugin => plugin( fn )
-  Tree.plugins = { parentMap, serializer, meta, wrapNodes }
+  Tree.plugins = { parentMap, accepts, serializer, meta, wrapNodes }
 
   return Tree
 }
 
-module.exports = treeFactory( defaultAdapter, [ parentMap, serializer, meta, wrapNodes ] )
+module.exports = treeFactory(
+  defaultAdapter,
+  [  parentMap, accepts, serializer, meta, wrapNodes ]
+)

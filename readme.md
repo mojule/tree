@@ -326,6 +326,34 @@ or false if it doesn't (is a leaf node).
 const hasChildren = node.hasChildren()
 ```
 
+#### isEmpty
+
+Returns a boolean indicating whether or not the current node *can* have
+children - note, not the same as `hasChildren`, which is whether or not the node
+*does* have children. The default implementation always returns `false`, but
+you can override it to make leaf-only nodes.
+
+```javascript
+// isEmpty() => Boolean
+
+const isEmpty = node.isEmpty()
+```
+
+#### accepts
+
+Returns a boolean indicating whether or not the current node can accept another
+node. Also extends `insertBefore` (and by definition all of the other insertion
+methods, as they are all built on `insertBefore`) so that an error is thrown
+if you try to add a child that the parent cannot accept. The default
+implementation only checks that the node is not `isEmpty` but it can be extended
+for custom behavior.
+
+```javascript
+// accepts( child: Node ) => Boolean
+
+const accepts = node.accepts( child )
+```
+
 ### Manipulation
 
 #### append

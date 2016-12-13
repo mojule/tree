@@ -20,6 +20,7 @@ const findAll = require( './traversal/findAll' )
 const firstChild = require( './traversal/firstChild' )
 const getParent = require( './traversal/getParent' )
 const hasChildren = require( './traversal/hasChildren' )
+const isEmpty = require( './traversal/isEmpty' )
 const lastChild = require( './traversal/lastChild' )
 const nextSibling = require( './traversal/nextSibling' )
 const previousSibling = require( './traversal/previousSibling' )
@@ -36,7 +37,7 @@ const value = require( './adapter/value' )
 module.exports = {
   append, empty, insertAfter, insertAt, prepend, removeAt, replaceChild,
   unwrap, wrap, ancestors, childAt, closest, contains, descendents, find,
-  findAll, firstChild, getParent, hasChildren, lastChild, nextSibling,
+  findAll, firstChild, getParent, hasChildren, isEmpty, lastChild, nextSibling,
   previousSibling, siblings, walk, walkUp, createNode, getChildren,
   insertBefore, remove, value
 }
