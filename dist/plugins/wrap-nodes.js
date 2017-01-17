@@ -32,6 +32,10 @@ var argsMap = function argsMap(fn, argTypes, map) {
   };
 };
 
+var clone = function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+};
+
 var wrapNodes = function wrapNodes(_fn) {
   var fnames = Object.keys(_fn);
 
@@ -118,6 +122,18 @@ var wrapNodes = function wrapNodes(_fn) {
     wrapped.getRoot = function () {
       return root;
     };
+
+    // assist with debugging
+    Object.defineProperty(wrapped, '_value', {
+      get: function get() {
+        return clone(_fn.value(node));
+      }
+    });
+    Object.defineProperty(wrapped, '_children', {
+      get: function get() {
+        return clone(_fn.getChildren(node));
+      }
+    });
 
     return wrapped;
   };

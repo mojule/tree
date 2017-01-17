@@ -22,6 +22,8 @@ const argsMap = ( fn, argTypes, map ) => ( ...args ) => {
   return fn( ...wrappedArgs )
 }
 
+const clone = obj => JSON.parse( JSON.stringify( obj ) )
+
 const wrapNodes = fn => {
   const fnames = Object.keys( fn )
 
@@ -87,6 +89,14 @@ const wrapNodes = fn => {
 
     wrapped.get = () => node
     wrapped.getRoot = () => root
+
+    // assist with debugging
+    Object.defineProperty( wrapped, '_value', {
+      get: () => clone( fn.value( node ) )
+    })
+    Object.defineProperty( wrapped, '_children', {
+      get: () => clone( fn.getChildren( node ) )
+    })
 
     return wrapped
   }

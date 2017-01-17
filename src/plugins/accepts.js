@@ -13,7 +13,7 @@ const acceptsNode = fn => {
   const originalInsertBefore = fn.insertBefore
 
   const insertBefore = ( fn, root, parentNode, childNode, referenceNode ) => {
-    if( !fn.accepts( parentNode, childNode ) )
+    if( !fn.accepts( fn, parentNode, childNode ) )
       throw new Error( 'Node cannot accept this child' )
 
     return originalInsertBefore( fn, root, parentNode, childNode, referenceNode )
