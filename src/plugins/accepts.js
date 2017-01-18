@@ -1,7 +1,7 @@
 'use strict'
 
 const acceptsNode = fn => {
-  const accepts = ( fn, node, childNode ) => !fn.isEmpty( node )
+  const accepts = ( fn, node, childNode ) => !fn.isEmpty( fn, node )
 
   accepts.def = {
     argType: [ 'fn', 'node', 'node' ],

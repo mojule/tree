@@ -2,7 +2,7 @@
 
 var acceptsNode = function acceptsNode(fn) {
   var accepts = function accepts(fn, node, childNode) {
-    return !fn.isEmpty(node);
+    return !fn.isEmpty(fn, node);
   };
 
   accepts.def = {
