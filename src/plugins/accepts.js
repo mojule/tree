@@ -4,7 +4,7 @@ const acceptsNode = fn => {
   const accepts = ( fn, node, childNode ) => !fn.isEmpty( fn, node )
 
   accepts.def = {
-    argType: [ 'fn', 'node', 'node' ],
+    argTypes: [ 'fn', 'node', 'node' ],
     returnType: 'boolean',
     require: [ 'isEmpty' ],
     categories: [ 'node', 'plugin' ]

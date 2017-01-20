@@ -6,7 +6,7 @@ var acceptsNode = function acceptsNode(fn) {
   };
 
   accepts.def = {
-    argType: ['fn', 'node', 'node'],
+    argTypes: ['fn', 'node', 'node'],
     returnType: 'boolean',
     require: ['isEmpty'],
     categories: ['node', 'plugin']

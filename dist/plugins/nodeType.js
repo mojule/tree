@@ -10,7 +10,7 @@ var getNodeType = function getNodeType(fn) {
   };
 
   nodeType.def = {
-    argType: ['fn', 'node'],
+    argTypes: ['fn', 'node'],
     returnType: 'string',
     require: ['value'],
     categories: ['node', 'plugin']

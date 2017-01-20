@@ -20,7 +20,7 @@ const lazyId = fn => {
   }
 
   id.def = {
-    argType: [ 'fn', 'node' ],
+    argTypes: [ 'fn', 'node' ],
     returnType: 'string',
     require: [ 'value', 'nodeType' ],
     categories: [ 'node', 'plugin' ]
