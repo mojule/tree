@@ -10,6 +10,13 @@ var parentMap = require('./plugins/parent-map');
 var serializer = require('./plugins/serializer');
 var wrapNodes = require('./plugins/wrap-nodes');
 var accepts = require('./plugins/accepts');
+var nodeType = require('./plugins/nodeType');
+var id = require('./plugins/id');
+
+var plugins = { parentMap: parentMap, accepts: accepts, nodeType: nodeType, id: id, serializer: serializer, meta: meta, wrapNodes: wrapNodes };
+var pluginArray = Object.keys(plugins).map(function (key) {
+  return plugins[key];
+});
 
 var treeFactory = function treeFactory(adapter, plugins) {
   var fn = fnFactory(adapter);
@@ -51,9 +58,9 @@ var treeFactory = function treeFactory(adapter, plugins) {
   Tree.plugin = function (plugin) {
     return plugin(fn);
   };
-  Tree.plugins = { parentMap: parentMap, accepts: accepts, serializer: serializer, meta: meta, wrapNodes: wrapNodes };
+  Tree.plugins = plugins;
 
   return Tree;
 };
 
-module.exports = treeFactory(defaultAdapter, [parentMap, accepts, serializer, meta, wrapNodes]);
+module.exports = treeFactory(defaultAdapter, pluginArray);

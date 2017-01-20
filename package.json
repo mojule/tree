@@ -1,6 +1,6 @@
 {
   "name": "1tree",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Functional API for traversing and manipulating tree structures",
   "main": "index.js",
   "scripts": {
@@ -31,5 +31,8 @@
   "bugs": {
     "url": "https://github.com/mojule/1tree/issues"
   },
-  "homepage": "https://github.com/mojule/1tree#readme"
+  "homepage": "https://github.com/mojule/1tree#readme",
+  "dependencies": {
+    "mojule-utils": "^0.1.1"
+  }
 }
