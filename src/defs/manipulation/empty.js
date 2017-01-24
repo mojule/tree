@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 module.exports = {
   empty: ( fn, root, parentNode ) => {
@@ -6,9 +6,9 @@ module.exports = {
 
     return children.reduce( ( removed, node ) => {
       removed.push( fn.remove( fn, parentNode, node ) )
-      
+
       return removed
-    }, [] ) 
+    }, [] )
   },
   argTypes: [ 'fn', 'rootNode', 'node' ],
   returnType: '[node]',

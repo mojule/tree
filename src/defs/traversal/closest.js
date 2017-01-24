@@ -1,11 +1,11 @@
 'use strict'
 
 module.exports = {
- closest: ( fn, root, node, predicate ) => {
+  closest: ( fn, root, node, predicate ) => {
     let targetNode
 
     fn.walkUp( fn, root, node, currentNode => {
-      if( predicate( currentNode ) ){
+      if( predicate( currentNode ) ) {
         targetNode = currentNode
 
         return true
