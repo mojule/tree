@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   prepend: function prepend(fn, root, parentNode, childNode) {

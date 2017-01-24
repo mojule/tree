@@ -3,7 +3,7 @@
 var acceptsNode = function acceptsNode(fn) {
   var accepts = function accepts(fn, node, childNode) {
     return !fn.isEmpty(fn, node);
-  };
+  }; //eslint-disable-line no-unused-vars
 
   accepts.def = {
     argType: ['fn', 'node', 'node'],

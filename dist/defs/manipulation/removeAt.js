@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   removeAt: function removeAt(fn, root, parentNode, index) {

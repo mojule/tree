@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   insertAt: function insertAt(fn, root, parentNode, childNode, index) {

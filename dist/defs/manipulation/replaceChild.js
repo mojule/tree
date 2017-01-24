@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   replaceChild: function replaceChild(fn, root, parentNode, newNode, oldNode) {
@@ -9,5 +9,5 @@ module.exports = {
   argTypes: ['fn', 'rootNode', 'node', 'node', 'node'],
   returnType: 'node',
   requires: ['insertBefore', 'remove'],
-  categories: ["manipulation"]
+  categories: ['manipulation']
 };

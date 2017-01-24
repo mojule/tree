@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   empty: function empty(fn, root, parentNode) {
