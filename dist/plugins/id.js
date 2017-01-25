@@ -8,7 +8,7 @@ var lazyId = function lazyId(fn) {
 
     if (value._id) return value._id;
 
-    var nodeType = fn.nodeType(node);
+    var nodeType = fn.nodeType(fn, node);
     var id = utils.id(nodeType);
 
     value._id = id;
