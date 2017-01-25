@@ -9,7 +9,7 @@ const lazyId = fn => {
     if( value._id )
       return value._id
 
-    const nodeType = fn.nodeType( node )
+    const nodeType = fn.nodeType( fn, node )
     const id = utils.id( nodeType )
 
     value._id = id
