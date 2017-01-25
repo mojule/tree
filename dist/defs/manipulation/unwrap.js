@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   unwrap: function unwrap(fn, root, node) {

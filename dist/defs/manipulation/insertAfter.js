@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   insertAfter: function insertAfter(fn, root, parentNode, childNode, referenceNode) {

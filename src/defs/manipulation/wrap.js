@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 module.exports = {
   wrap: ( fn, root, node, newNode ) => {

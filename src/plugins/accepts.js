@@ -1,7 +1,7 @@
 'use strict'
 
 const acceptsNode = fn => {
-  const accepts = ( fn, node, childNode ) => !fn.isEmpty( fn, node )
+  const accepts = ( fn, node, childNode ) => !fn.isEmpty( fn, node ) //eslint-disable-line no-unused-vars
 
   accepts.def = {
     argTypes: [ 'fn', 'node', 'node' ],

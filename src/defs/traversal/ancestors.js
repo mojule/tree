@@ -4,7 +4,7 @@ module.exports = {
   ancestors: ( fn, root, node ) => {
     const parentNodes = []
 
-    let parent = fn.getParent( fn, root, node )
+    const parent = fn.getParent( fn, root, node )
 
     if( parent ) fn.walkUp( fn, root, parent, n => {
       parentNodes.push( n )

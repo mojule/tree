@@ -3,9 +3,9 @@
 module.exports = {
   walk: ( fn, node, callback ) => {
     let current, parent, depth, i, children, stop
-    let nodes = [ node ]
-    let parents = [ null ]
-    let depths = [ 0 ]
+    const nodes = [ node ]
+    const parents = [ null ]
+    const depths = [ 0 ]
 
     while( nodes.length ){
       current = nodes.pop()
@@ -28,4 +28,4 @@ module.exports = {
   argTypes: [ 'fn', 'node', '( node, node, integer ) => boolean' ],
   requires: [ 'getChildren' ],
   categories: [ 'traversal' ]
-} 
+}
