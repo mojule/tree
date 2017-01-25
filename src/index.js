@@ -13,8 +13,8 @@ const accepts = require( './plugins/accepts' )
 const nodeType = require( './plugins/nodeType' )
 const id = require( './plugins/id' )
 
-const plugins = { parentMap, accepts, nodeType, id, serializer, meta, wrapNodes }
-const pluginArray = Object.keys( plugins ).map( key => plugins[ key ] )
+const pluginMap = { parentMap, accepts, nodeType, id, serializer, meta, wrapNodes }
+const pluginArray = Object.keys( pluginMap ).map( key => pluginMap[ key ] )
 
 const treeFactory = ( adapter, plugins ) => {
   const fn = fnFactory( adapter )
@@ -45,7 +45,7 @@ const treeFactory = ( adapter, plugins ) => {
   Tree.fn = fn
   Tree.adapter = treeFactory
   Tree.plugin = plugin => plugin( fn )
-  Tree.plugins = plugins
+  Tree.plugins = pluginMap
 
   return Tree
 }
