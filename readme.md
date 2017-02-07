@@ -112,6 +112,16 @@ Gets the child at the specified index
 const second = node.childAt( 2 )
 ```
 
+#### index
+
+Gets the index of the node relative to its siblings
+
+```javascript
+// index() => childIndex: Integer
+
+const index = node.index()
+```
+
 #### firstChild
 
 Get the first child of the current node
@@ -352,6 +362,44 @@ for custom behavior.
 // accepts( child: Node ) => Boolean
 
 const accepts = node.accepts( child )
+```
+
+#### slug
+
+Returns a string for a node which is unique amongst its siblings. The default
+implementation uses the node's `index` converted to a string.
+
+```javascript
+// slug() => String
+
+const slug = node.slug()
+```
+
+#### getPath
+
+Returns a string representing the path from the root to the node. The path is
+constructed of each node in the path's slug joined together with an optional
+separator string. The default separator string is `/`. None of the slugs may
+contain the separator string, or an error will be thrown.
+
+```javascript
+// getPath( separator: String = "/" ) => String
+
+const path = node.getPath()
+const path2 = node.getPath( '_' )
+```
+
+#### atPath
+
+Finds the node matching the specified path. The default separator string is `/`.
+If not using the default separator, the same separator must be used that was
+initially used to create the path. If the path is invalid or no node matched the
+path, `undefined` will be returned.
+
+```javascript
+// atPath( path: String, separator: String = "/" ) => Node | Undefined
+
+const node = root.atPath( '/0/1/0/3/2' )
 ```
 
 ### Manipulation

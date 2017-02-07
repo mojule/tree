@@ -11,6 +11,7 @@ var unwrap = require('./manipulation/unwrap');
 var wrap = require('./manipulation/wrap');
 
 var ancestors = require('./traversal/ancestors');
+var atPath = require('./traversal/atPath');
 var childAt = require('./traversal/childAt');
 var closest = require('./traversal/closest');
 var contains = require('./traversal/contains');
@@ -19,12 +20,15 @@ var find = require('./traversal/find');
 var findAll = require('./traversal/findAll');
 var firstChild = require('./traversal/firstChild');
 var getParent = require('./traversal/getParent');
+var getPath = require('./traversal/getPath');
 var hasChildren = require('./traversal/hasChildren');
+var index = require('./traversal/index');
 var isEmpty = require('./traversal/isEmpty');
 var lastChild = require('./traversal/lastChild');
 var nextSibling = require('./traversal/nextSibling');
 var previousSibling = require('./traversal/previousSibling');
 var siblings = require('./traversal/siblings');
+var slug = require('./traversal/slug');
 var walk = require('./traversal/walk');
 var walkUp = require('./traversal/walkUp');
 
@@ -35,9 +39,9 @@ var remove = require('./adapter/remove');
 var value = require('./adapter/value');
 
 module.exports = {
-  append: append, empty: empty, insertAfter: insertAfter, insertAt: insertAt, prepend: prepend, removeAt: removeAt, replaceChild: replaceChild,
+  append: append, atPath: atPath, empty: empty, insertAfter: insertAfter, insertAt: insertAt, prepend: prepend, removeAt: removeAt, replaceChild: replaceChild,
   unwrap: unwrap, wrap: wrap, ancestors: ancestors, childAt: childAt, closest: closest, contains: contains, descendents: descendents, find: find,
-  findAll: findAll, firstChild: firstChild, getParent: getParent, hasChildren: hasChildren, isEmpty: isEmpty, lastChild: lastChild, nextSibling: nextSibling,
-  previousSibling: previousSibling, siblings: siblings, walk: walk, walkUp: walkUp, createNode: createNode, getChildren: getChildren,
-  insertBefore: insertBefore, remove: remove, value: value
+  findAll: findAll, firstChild: firstChild, getParent: getParent, getPath: getPath, hasChildren: hasChildren, index: index, isEmpty: isEmpty,
+  lastChild: lastChild, nextSibling: nextSibling, previousSibling: previousSibling, siblings: siblings, slug: slug, walk: walk, walkUp: walkUp,
+  createNode: createNode, getChildren: getChildren, insertBefore: insertBefore, remove: remove, value: value
 };

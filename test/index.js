@@ -91,6 +91,24 @@ describe( 'default tree', () => {
     assert( secondChild.value() === 'Arthropoda' )
   })
 
+  it( 'should get index', () => {
+    const root = biologyTree( Tree )
+
+    const secondChild = root.childAt( 1 )
+    const index = secondChild.index()
+
+    assert.equal( index, 1 )
+  })
+
+  it( 'should get slug', () => {
+    const root = biologyTree( Tree )
+
+    const secondChild = root.childAt( 1 )
+    const slug = secondChild.slug()
+
+    assert.equal( slug, '1' )
+  })
+
   it( 'should get first child', () => {
     const root = biologyTree( Tree )
 
@@ -205,6 +223,27 @@ describe( 'default tree', () => {
 
     assert( hominidae.hasChildren() )
     assert( !human.hasChildren() )
+  })
+
+  it( 'should get and find paths', () => {
+    const root = biologyTree( Tree )
+
+    const allPaths = new Set()
+
+    let count = 0
+    root.walk( n => {
+      const currentPath = n.getPath()
+
+      allPaths.add( currentPath )
+
+      const nodeAtPath = root.atPath( currentPath )
+
+      assert.equal( n.get(), nodeAtPath.get() )
+
+      count++
+    })
+
+    assert.equal( count, allPaths.size )
   })
 
   it( 'should create a node', () => {
