@@ -2,7 +2,7 @@
 
 module.exports = {
   atPath: function atPath(fn, root, path) {
-    var separator = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '/';
+    var separator = arguments.length <= 3 || arguments[3] === undefined ? '/' : arguments[3];
 
     var node = root;
 
@@ -11,15 +11,13 @@ module.exports = {
     });
 
     slugs.forEach(function (slug) {
-      if (!node) {
-        throw new Error('Bad path "' + path + '"');
+      if (node) {
+        var children = fn.getChildren(node);
+
+        node = children.find(function (childNode) {
+          return fn.slug(fn, root, childNode) === slug;
+        });
       }
-
-      var children = fn.getChildren(node);
-
-      node = children.find(function (childNode) {
-        return fn.slug(fn, root, childNode) === slug;
-      });
     });
 
     return node;

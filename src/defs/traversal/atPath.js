@@ -7,15 +7,13 @@ module.exports = {
     const slugs = path.split( separator ).filter( s => s !== '' )
 
     slugs.forEach( slug => {
-      if( !node ){
-        throw new Error( `Bad path "${ path }"` )
+      if( node ){
+        const children = fn.getChildren( node )
+
+        node = children.find( childNode =>
+          fn.slug( fn, root, childNode ) === slug
+        )
       }
-
-      const children = fn.getChildren( node )
-
-      node = children.find( childNode =>
-        fn.slug( fn, root, childNode ) === slug
-      )
     })
 
     return node

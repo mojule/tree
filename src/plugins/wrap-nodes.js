@@ -1,5 +1,8 @@
 'use strict'
 
+const utils = require( 'mojule-utils' )
+const { clone } = utils
+
 const signatureToDef = sig => {
   const segs = sig.split( '=>' )
   const argTypes = segs[ 0 ].replace( '(', '' ).replace( ')', '' ).split( ',' ).map( arg => arg.trim() )
@@ -21,8 +24,6 @@ const argsMap = ( fn, argTypes, map ) => ( ...args ) => {
 
   return fn( ...wrappedArgs )
 }
-
-const clone = obj => JSON.parse( JSON.stringify( obj ) )
 
 const wrapNodes = fn => {
   const fnames = Object.keys( fn )

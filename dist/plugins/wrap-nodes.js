@@ -2,6 +2,10 @@
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+var utils = require('mojule-utils');
+var clone = utils.clone;
+
+
 var signatureToDef = function signatureToDef(sig) {
   var segs = sig.split('=>');
   var argTypes = segs[0].replace('(', '').replace(')', '').split(',').map(function (arg) {
@@ -30,10 +34,6 @@ var argsMap = function argsMap(fn, argTypes, map) {
 
     return fn.apply(undefined, _toConsumableArray(wrappedArgs));
   };
-};
-
-var clone = function clone(obj) {
-  return JSON.parse(JSON.stringify(obj));
 };
 
 var wrapNodes = function wrapNodes(_fn) {
