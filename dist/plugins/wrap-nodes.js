@@ -80,20 +80,41 @@ var wrapNodes = function wrapNodes(_fn) {
         }
       };
 
-      var curried = argTypes.map(function (t) {
-        if (curryMap[t]) return curryMap[t]();
+      var curried = [];
+
+      var valuesForArgType = function valuesForArgType(t) {
+        if (curryMap[t]) return [curryMap[t]()];
+
+        if (t.indexOf('...') !== -1) {
+          var restType = t.split('...').filter(function (seg) {
+            return seg.trim() !== '';
+          }).join('');
+
+          if (restType === 'fn' || restType === 'rootNode') throw new Error('Cannot use fn or rootNode as a rest parameter type in argTypes');
+
+          var restValues = [];
+
+          while (args.length) {
+            restValues.push.apply(restValues, _toConsumableArray(valuesForArgType(restType)));
+          }return restValues;
+        }
 
         if (t.indexOf('=>') !== -1) {
           var _def = signatureToDef(t);
           var fnArg = args.shift();
 
-          return argsMap(fnArg, _def.argTypes, argMap);
+          return [argsMap(fnArg, _def.argTypes, argMap)];
         }
 
-        return curryMap.any();
+        return [curryMap.any()];
+      };
+
+      argTypes.forEach(function (t) {
+        var values = valuesForArgType(t);
+        curried.push.apply(curried, _toConsumableArray(values));
       });
 
-      var result = func.apply(undefined, _toConsumableArray(curried));
+      var result = func.apply(undefined, curried);
 
       if (def.returnType === 'node') {
         result = wrappedNode(root, result);

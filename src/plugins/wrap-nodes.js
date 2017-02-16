@@ -54,17 +54,38 @@ const wrapNodes = fn => {
       node: n => wrappedNode( root, n )
     }
 
-    const curried = argTypes.map( t => {
-      if( curryMap[ t ] ) return curryMap[ t ]()
+    const curried = []
+
+    const valuesForArgType = t => {
+      if( curryMap[ t ] ) return [ curryMap[ t ]() ]
+
+      if( t.indexOf( '...' ) !== -1 ){
+        const restType = t.split( '...' ).filter( seg => seg.trim() !== '' ).join( '' )
+
+        if( restType === 'fn' || restType === 'rootNode' )
+          throw new Error( 'Cannot use fn or rootNode as a rest parameter type in argTypes' )
+
+        const restValues = []
+
+        while( args.length )
+          restValues.push( ...valuesForArgType( restType ) )
+
+        return restValues
+      }
 
       if( t.indexOf( '=>' ) !== -1 ){
         const def = signatureToDef( t )
         const fnArg = args.shift()
 
-        return argsMap( fnArg, def.argTypes, argMap )
+        return [ argsMap( fnArg, def.argTypes, argMap ) ]
       }
 
-      return curryMap.any()
+      return [ curryMap.any() ]
+    }
+
+    argTypes.forEach( t => {
+      const values = valuesForArgType( t )
+      curried.push( ...values )
     })
 
     let result = func( ...curried )

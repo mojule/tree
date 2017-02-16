@@ -2,7 +2,7 @@
 
 module.exports = {
   getPath: function getPath(fn, root, node) {
-    var separator = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '/';
+    var separator = arguments.length <= 3 || arguments[3] === undefined ? '/' : arguments[3];
 
     if (root === node) return separator;
 

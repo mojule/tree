@@ -2,7 +2,7 @@
 
 module.exports = {
   atPath: function atPath(fn, root, path) {
-    var separator = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '/';
+    var separator = arguments.length <= 3 || arguments[3] === undefined ? '/' : arguments[3];
 
     var node = root;
 

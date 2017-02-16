@@ -4,6 +4,55 @@ const assert = require( 'assert' )
 const Tree = require( '../src' )
 const biologyTree = require( './fixtures/biology' )
 
+const defaultAdapter = require( '../src/adapter/default' )
+const basePlugins = Object.keys( Tree.plugins ).map( key => Tree.plugins[ key ] )
+
+const TreeFactory = ( ...args ) => {
+  const excludeBase = args.some( arg => typeof arg === 'boolean' && arg )
+
+  let adapter = defaultAdapter
+  let plugins = excludeBase ? [] : basePlugins
+
+  args.forEach( arg => {
+    if( Array.isArray( arg ) ){
+      plugins = arg.concat( plugins )
+    } else if( typeof arg === 'function' ){
+      plugins = [ arg ].concat( plugins )
+    } else if( typeof arg === 'object' ) {
+      adapter = arg
+    }
+  })
+
+  return Tree.adapter( adapter, plugins )
+}
+
+const restPlugin = fn => {
+  const rest = ( ...args ) => args
+
+  rest.def = {
+    argTypes: [ '...string' ],
+    returnType: '[string]'
+  }
+
+  const restNode = ( fn, root, node, ...nodes ) => {
+    const rootValue = fn.value( root )
+    const nodeValue = fn.value( node )
+
+    const nodesValue = nodes.map( n => fn.value( n ) )
+
+    return [ rootValue, nodeValue, ...nodesValue ]
+  }
+
+  restNode.def = {
+    argTypes: [ 'fn', 'rootNode', 'node', '...node' ],
+    returnType: '[string]'
+  }
+
+  return Object.assign( fn, { rest, restNode } )
+}
+
+const RestTree = TreeFactory( restPlugin )
+
 describe( 'default tree', () => {
   it( 'should create a tree', () => {
     const root = Tree.createRoot( 'Root' )
@@ -486,6 +535,25 @@ describe( 'default tree', () => {
     }
 
     assert.deepEqual( serialized, shouldBe )
+  })
+
+  it( 'should wrap rest parameters currectly', () => {
+    const root = RestTree.createRoot( 'Root' )
+
+    const result = root.rest( 'a', 'b', 'c' )
+
+    assert.deepEqual( result, [ 'a', 'b', 'c' ] )
+  })
+
+  it( 'should wrap node rest parameters currectly', () => {
+    const root = RestTree.createRoot( 'Root' )
+    const aNode = root.createNode( 'a' )
+    const bNode = root.createNode( 'b' )
+    const cNode = root.createNode( 'c' )
+
+    const result = aNode.restNode( bNode, cNode )
+
+    assert.deepEqual( result, [ 'Root', 'a', 'b', 'c' ] )
   })
 })
 
