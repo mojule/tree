@@ -1,31 +1,24 @@
 'use strict';
 
-var utils = require('mojule-utils');
+var utils = require('@mojule/utils');
 
-var lazyId = function lazyId(fn) {
-  var id = function id(fn, node) {
-    var value = fn.value(node);
+var idModule = function idModule(node, state) {
+    var id = function id() {
+        var value = node.getValue();
 
-    if (value._id) return value._id;
+        if (value.id) return value.id;
 
-    var nodeType = fn.nodeType(fn, node);
-    var id = utils.id(nodeType);
+        var nodeType = node.nodeType();
+        var id = utils.id(nodeType);
 
-    value._id = id;
+        value.id = id;
 
-    fn.value(node, value);
+        node.setValue(value);
 
-    return id;
-  };
+        return id;
+    };
 
-  id.def = {
-    argTypes: ['fn', 'node'],
-    returnType: 'string',
-    require: ['value', 'nodeType'],
-    categories: ['node', 'plugin']
-  };
-
-  return Object.assign(fn, { id: id });
+    return { id: id };
 };
 
-module.exports = lazyId;
+module.exports = idModule;

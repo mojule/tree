@@ -1,56 +1,21 @@
 'use strict'
 
-require( './polyfills' )
+const TreeFactory = require( '@mojule/tree-factory' )
+const is = require( '@mojule/is' )
+const adapter = require( './adapter' )
+const defaultPlugins = require( './plugins' )
 
-const defaultAdapter = require( './adapter/default' )
-const fnFactory = require( './fn-factory' )
+const Factory = ( ...plugins ) => {
+  if( plugins.length === 1 && is.array( plugins[ 0 ] ) )
+    plugins = plugins[ 0 ]
 
-const meta = require( './plugins/meta' )
-const parentMap = require( './plugins/parent-map' )
-const serializer = require( './plugins/serializer' )
-const wrapNodes = require( './plugins/wrap-nodes' )
-const accepts = require( './plugins/accepts' )
-const nodeType = require( './plugins/nodeType' )
-const id = require( './plugins/id' )
+  plugins = defaultPlugins.concat( plugins )
 
-const pluginMap = { parentMap, accepts, nodeType, id, serializer, meta, wrapNodes }
-const pluginArray = Object.keys( pluginMap ).map( key => pluginMap[ key ] )
-
-const treeFactory = ( adapter, plugins ) => {
-  const fn = fnFactory( adapter )
-
-  if( Array.isArray( plugins ) )
-    plugins.forEach( plugin => plugin( fn ) )
-
-  // create wrapped API
-  const Tree = root => fn.createTree( root )
-
-  const fnames = Object.keys( fn )
-
-  fnames.forEach( fname => {
-    const func = fn[ fname ]
-    const def = func.def || {}
-    const argTypes = Array.isArray( def.argTypes ) ? def.argTypes : []
-
-    Tree[ fname ] = ( ...args ) => {
-      if( argTypes.includes( 'fn' ) ){
-        return func( fn, ...args )
-      }
-
-      return func( ...args )
-    }
-  })
-
-  Tree.createRoot = value => Tree( Tree.createNode( value ) )
-  Tree.fn = fn
-  Tree.adapter = treeFactory
-  Tree.plugin = plugin => plugin( fn )
-  Tree.plugins = pluginMap
-
-  return Tree
+  return TreeFactory( adapter, plugins )
 }
 
-module.exports = treeFactory(
-  defaultAdapter,
-  pluginArray
-)
+const Tree = Factory()
+
+Object.assign( Tree, { Factory } )
+
+module.exports = Tree

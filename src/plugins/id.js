@@ -1,32 +1,25 @@
 'use strict'
 
-const utils = require( 'mojule-utils' )
+const utils = require( '@mojule/utils' )
 
-const lazyId = fn => {
-  const id = ( fn, node ) => {
-    const value = fn.value( node )
+const idModule = ( node, state ) => {
+  const id = () => {
+    const value = node.getValue()
 
-    if( value._id )
-      return value._id
+    if( value.id )
+      return value.id
 
-    const nodeType = fn.nodeType( fn, node )
+    const nodeType = node.nodeType()
     const id = utils.id( nodeType )
 
-    value._id = id
+    value.id = id
 
-    fn.value( node, value )
+    node.setValue( value )
 
     return id
   }
 
-  id.def = {
-    argTypes: [ 'fn', 'node' ],
-    returnType: 'string',
-    require: [ 'value', 'nodeType' ],
-    categories: [ 'node', 'plugin' ]
-  }
-
-  return Object.assign( fn, { id } )
+  return { id }
 }
 
-module.exports = lazyId
+module.exports = idModule
