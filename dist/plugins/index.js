@@ -1,5 +1,6 @@
 'use strict';
 
 var idModule = require('./id');
+var valueModule = require('./value');
 
-module.exports = [idModule];
+module.exports = [idModule, valueModule];

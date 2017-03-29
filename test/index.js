@@ -29,6 +29,38 @@ describe( 'Tree', () => {
         assert.equal( ids[ name ], id )
       })
     })
+
+    it( 'getValue', () => {
+      const root = Tree( { name: 'Animalia' } )
+
+      assert.deepEqual( root.getValue(), { name: 'Animalia' } )
+      assert.deepEqual( root.value(), { name: 'Animalia' } )
+      assert.equal( root.getValue( 'name' ), 'Animalia' )
+    })
+
+    it( 'setValue', () => {
+      const root = Tree( { name: 'Animalia' } )
+
+      root.setValue( { name: 'Chordate' } )
+
+      assert.deepEqual( root.getValue(), { name: 'Chordate' } )
+
+      root.setValue( 'name', 'Animalia' )
+
+      assert.deepEqual( root.getValue(), { name: 'Animalia' } )
+    })
+
+    it( 'assign', () => {
+      const root = Tree( { name: 'Animalia' } )
+
+      root.assign( { name: 'Chordate' } )
+
+      assert.deepEqual( root.getValue(), { name: 'Chordate' } )
+
+      root.assign( { id: 'root' } )
+
+      assert.deepEqual( root.getValue(), { name: 'Chordate', id: 'root' } )
+    })
   })
 
   it( 'plugin factory', () => {

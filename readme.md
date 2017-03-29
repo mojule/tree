@@ -41,12 +41,81 @@ Animalia
 
 ## Implementation
 
-This implementation expects the node `value` to be an object. It also provides
-a plugin, `.id()`, which will return the id property of the value if it exists,
-and if it doesn't, it will set it to a random id based on the `nodeType` and
-then return that id.
-
 The [underlying adapter](/src/adapter.js) stores nodes in an array.
+
+This implementation expects the node `value` to be an object. This allows for
+some extra plugins, as follows:
+
+### id
+
+Lazy initialized unique IDs for nodes - when called, it will check if the node's
+value has an `id` property, and if it does, return it.
+
+If the value doesn't have an id property, a new id is generated from a random
+GUID-like string prefixed by the node's `nodeType` and a hyphen.
+
+```javascript
+const node = Tree( { name: 'Animalia' } )
+
+// something like 'node-dcef0534a6c23fd1b23001aed9f3c7f1'
+console.log( node.id() )
+
+// { name: 'Animalia', id: 'node-dcef0534a6c23fd1b23001aed9f3c7f1' }
+console.log( node.getValue() )
+
+const withId = Tree( { id: 'root' } )
+
+// 'root'
+console.log( node.id() )
+```
+
+### getValue
+
+Because this implementation's value is always an object, the existing `getValue`
+is extended to take an optional `propertyName` argument:
+
+```javascript
+const node = Tree( { name: 'Animalia' } )
+
+// { name: 'Animalia' }
+console.log( node.getValue() )
+
+// 'Animalia'
+console.log( node.getValue( 'name' ) )
+```
+
+### setValue
+
+If `setValue` is passed an object as its first argument, it will behave like the
+existing setValue implementation. If passed a string as its first value, it will
+set that property on the value:
+
+```javascript
+const node = Tree( { name: 'Animalia' } )
+
+node.setValue( { name: 'Chordate' } )
+
+// { name: 'Chordate' }
+console.log( node.getValue() )
+
+node.setValue( 'name', 'Animalia' )
+
+// { name: 'Animalia' }
+console.log( node.getValue() )
+```
+
+### assign
+
+A new plugin, this will `Object.assign` the existing value with a new value:
+
+```javascript
+const node = Tree( { name: 'Zygjx' } )
+
+node.assign( { age: 437 } )
+
+// { name: 'Zygjx', age: 437 }
+console.log( node.getValue() )
+```
 
 ## Plugins
 
