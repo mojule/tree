@@ -61,6 +61,16 @@ describe( 'Tree', () => {
 
       assert.deepEqual( root.getValue(), { name: 'Chordate', id: 'root' } )
     })
+
+    it( 'nodeType', () => {
+      const root = Tree( { name: 'Animalia' } )
+
+      assert.equal( root.nodeType(), 'node' )
+
+      root.setValue( 'nodeType', 'biology' )
+
+      assert.equal( root.nodeType(), 'biology' )
+    })
   })
 
   it( 'plugin factory', () => {

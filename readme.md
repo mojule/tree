@@ -69,6 +69,24 @@ const withId = Tree( { id: 'root' } )
 console.log( node.id() )
 ```
 
+### nodeType
+
+The default implementation always returns 'node'. This plugin checks if the
+value has a property called nodeType and if that property is a string. If so,
+it returns that. If not, it returns the default value.
+
+```javascript
+const node = Tree( { name: 'Animalia' } )
+
+// 'node'
+console.log( node.nodeType() )
+
+node.setValue( 'nodeType', 'biology' )
+
+// 'biology'
+console.log( node.nodeType() )
+```
+
 ### getValue
 
 Because this implementation's value is always an object, the existing `getValue`
