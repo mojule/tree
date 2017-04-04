@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require( 'assert' )
-const Tree = require( '../dist' )
+const Tree = require( '../src' )
 
 describe( 'Tree', () => {
   describe( 'default plugins', () => {
