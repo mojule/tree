@@ -205,19 +205,21 @@ describe( 'Tree', () => {
     })
 
     it( 'parseState', () => {
-      const parseState = ( ...args ) => {
-        let value = args[ 0 ]
+      const parseState = ( Tree, ...args ) => {
+        if( args.length === 2 && args.every( is.string ) ){
+          const value = { name: args[ 0 ], id: args[ 1 ] }
+          const rawNode = Tree.createNode( value )
+          return { node: rawNode, root: rawNode, parent: null }
+        }
 
-        if( args.length === 2 && args.every( is.string ) )
-          return { name: args[ 0 ], id: args[ 1 ] }
-
-        if( is.string( value ) )
-          return { name: value }
-
-        return value
+        if( is.string( args[ 0 ] ) ){
+          const value = { name: args[ 0 ] }
+          const rawNode = Tree.createNode( value )
+          return { node: rawNode, root: rawNode, parent: null }
+        }
       }
 
-      const Tree = Factory( { parseState } )
+      const Tree = Factory( { stateParsers: [ parseState ] } )
 
       const tree1 = Tree( { name: 'Animalia' } )
       const tree2 = Tree( 'Animalia' )
