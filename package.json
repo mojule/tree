@@ -1,6 +1,6 @@
 {
   "name": "@mojule/tree",
-  "version": "0.5.8",
+  "version": "0.6.0",
   "description": "Functional API for traversing and manipulating tree structures",
   "main": "index.js",
   "scripts": {
@@ -35,8 +35,8 @@
   },
   "homepage": "https://github.com/mojule/tree#readme",
   "dependencies": {
-    "@mojule/is": "^0.1.1",
-    "@mojule/tree-factory": "^0.3.5",
+    "@mojule/is": "^0.1.2",
+    "@mojule/tree-factory": "^0.4.1",
     "@mojule/utils": "^0.1.10"
   }
 }
