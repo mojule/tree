@@ -212,14 +212,14 @@ describe( 'Tree', () => {
           $createState: ( ...args ) => {
             if( args.length === 2 && args.every( is.string ) ){
               const value = { name: args[ 0 ], id: args[ 1 ] }
-              const rawNode = api.createNode( value )
+              const rawNode = api.createRawNode( value )
 
               return { node: rawNode, root: rawNode, parent: null }
             }
 
             if( is.string( args[ 0 ] ) ){
               const value = { name: args[ 0 ] }
-              const rawNode = api.createNode( value )
+              const rawNode = api.createRawNode( value )
 
               return { node: rawNode, root: rawNode, parent: null }
             }

@@ -2,7 +2,7 @@
 
 const is = require( '@mojule/is' )
 
-const $createNode = value => [ value ]
+const $createRawNode = value => [ value ]
 
 const ArrayTreeAdapter = ( node, state ) => {
   const $isNode = rawNode => is.array( rawNode ) && node.isValue( rawNode[ 0 ] )
@@ -36,7 +36,7 @@ const ArrayTreeAdapter = ( node, state ) => {
   }
 
   const adapter = {
-    $isNode, $isValue, $createNode, getChildren, getValue, setValue, remove, add
+    $isNode, $isValue, $createRawNode, getChildren, getValue, setValue, remove, add
   }
 
   return adapter
