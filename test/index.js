@@ -204,22 +204,32 @@ describe( 'Tree', () => {
       assert( is.object( tree2.state ))
     })
 
-    it( 'parseState', () => {
-      const parseState = ( Tree, ...args ) => {
-        if( args.length === 2 && args.every( is.string ) ){
-          const value = { name: args[ 0 ], id: args[ 1 ] }
-          const rawNode = Tree.createNode( value )
-          return { node: rawNode, root: rawNode, parent: null }
-        }
+    it( 'createState', () => {
+      const createStateModule = api => {
+        const { createState } = api
 
-        if( is.string( args[ 0 ] ) ){
-          const value = { name: args[ 0 ] }
-          const rawNode = Tree.createNode( value )
-          return { node: rawNode, root: rawNode, parent: null }
+        return {
+          $createState: ( ...args ) => {
+            if( args.length === 2 && args.every( is.string ) ){
+              const value = { name: args[ 0 ], id: args[ 1 ] }
+              const rawNode = api.createNode( value )
+
+              return { node: rawNode, root: rawNode, parent: null }
+            }
+
+            if( is.string( args[ 0 ] ) ){
+              const value = { name: args[ 0 ] }
+              const rawNode = api.createNode( value )
+
+              return { node: rawNode, root: rawNode, parent: null }
+            }
+
+            return createState( ...args )
+          }
         }
       }
 
-      const Tree = Factory( { stateParsers: [ parseState ] } )
+      const Tree = Factory( createStateModule )
 
       const tree1 = Tree( { name: 'Animalia' } )
       const tree2 = Tree( 'Animalia' )
