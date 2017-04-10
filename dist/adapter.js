@@ -2,7 +2,7 @@
 
 var is = require('@mojule/is');
 
-var $createNode = function $createNode(value) {
+var $createRawNode = function $createRawNode(value) {
   return [value];
 };
 
@@ -48,7 +48,7 @@ var ArrayTreeAdapter = function ArrayTreeAdapter(node, state) {
   };
 
   var adapter = {
-    $isNode: $isNode, $isValue: $isValue, $createNode: $createNode, getChildren: getChildren, getValue: getValue, setValue: setValue, remove: remove, add: add
+    $isNode: $isNode, $isValue: $isValue, $createRawNode: $createRawNode, getChildren: getChildren, getValue: getValue, setValue: setValue, remove: remove, add: add
   };
 
   return adapter;
