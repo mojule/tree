@@ -13,7 +13,6 @@
 *.pdf binary
 *.png binary
 *.rtf binary
-*.svg binary
 *.tif binary
 *.zip binary
 
