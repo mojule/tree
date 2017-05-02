@@ -204,6 +204,28 @@ describe( 'Tree', () => {
       assert( is.object( tree2.state ))
     })
 
+    it( 'exposeProperties', () => {
+      const Tree1 = Factory( nameAndIdModule, { exposeProperties: [
+        'firstName', 'age'
+      ]})
+
+      const tree1 = Tree1( { name: 'person', firstName: 'Nik', age: 36 } )
+
+      assert.equal( tree1.firstName(), 'Nik' )
+      assert.equal( tree1.age(), '36' )
+    })
+
+    it( 'factory factory', () => {
+      const FactoryFactory = Tree.FactoryFactory
+      const NewFactory = FactoryFactory( Factory, [ nameAndIdModule ], { exposeState: true } )
+      const NewTree = NewFactory()
+      const newTree = NewTree( { name: 'Animalia' } )
+      const { name } = newTree.getValue()
+      const id = newTree.id()
+
+      assert.equal( newTree.nameAndId(), name + ' ' + id )
+    })
+
     it( 'createState', () => {
       const createStateModule = api => {
         const { createState } = api
