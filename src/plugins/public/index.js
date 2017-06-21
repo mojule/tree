@@ -9,23 +9,22 @@ const prependChild = require( './manipulation/prependChild' )
 const remove = require( './manipulation/remove' )
 const removeAll = require( './manipulation/removeAll' )
 const removeChild = require( './manipulation/removeChild' )
+const replaceChild = require( './manipulation/replaceChild' )
 const unwrap = require( './manipulation/unwrap' )
 const wrap = require( './manipulation/wrap' )
 
-const walk = require( './traversal/walk' )
 const nodes = require( './traversal/nodes' )
 
 const accepts = require( './query/accepts' )
 const atPath = require( './query/atPath' )
-const childAt = require( './query/childAt' )
 const depth = require( './query/depth' )
-const find = require( './query/find' )
-const findAll = require( './query/findAll' )
 const getPath = require( './query/getPath' )
-const has = require( './query/has' )
 const index = require( './query/index' )
+const isBranch = require( './query/isBranch' )
 const isEmpty = require( './query/isEmpty' )
 const isLeaf = require( './query/isLeaf' )
+const meta = require( './query/meta' )
+const nodeType = require( './query/nodeType' )
 const root = require( './query/root' )
 const slug = require( './query/slug' )
 
@@ -38,12 +37,12 @@ module.exports = [
   properties,
 
   appendChild, insertAfter, insertBefore, prependChild, remove, removeAll,
-  removeChild, unwrap, wrap,
+  removeChild, replaceChild, unwrap, wrap,
 
-  walk, nodes,
+  nodes,
 
-  accepts, atPath, childAt, depth, find, findAll, getPath, has, index, isEmpty,
-  isLeaf, root, slug,
+  accepts, atPath, depth, getPath, index, isBranch, isEmpty, isLeaf, meta,
+  nodeType, root, slug,
 
   serializer,
 

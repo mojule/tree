@@ -16,7 +16,7 @@ const serialize = ({ api, state, core }) => {
 
     const root = create( state )
 
-    api.walk( current => {
+    api.dfsNodes.forEach( current => {
       if( api === current ) return
 
       const currentState = getState( current )

@@ -318,10 +318,10 @@ describe( 'Tree', () => {
 
     describe( 'find', () => {
       describe( 'default (dfs)', () => {
-        it( 'find', () => {
+        it( 'find dfs', () => {
           const { root, a, aa } = testTree()
 
-          const target = root.find( current => current.value === 'a' )
+          const target = root.dfsNodes.find( current => current.value === 'a' )
 
           assert.deepEqual( target, a )
         })
@@ -329,7 +329,7 @@ describe( 'Tree', () => {
         it( 'non existent', () => {
           const { root, a, aa } = testTree()
 
-          const nope = root.find( current => current.value === 'nope' )
+          const nope = root.dfsNodes.find( current => current.value === 'nope' )
 
           assert.equal( nope, undefined )
         })
@@ -339,7 +339,7 @@ describe( 'Tree', () => {
         it( 'find', () => {
           const { root, a, aa } = testTree()
 
-          const target = aa.find( 'ancestor', current => current.value === 'a' )
+          const target = aa.ancestorNodes.find( current => current.value === 'a' )
 
           assert.deepEqual( target, a )
         })
@@ -347,7 +347,7 @@ describe( 'Tree', () => {
         it( 'non existent', () => {
           const { root, a, aa } = testTree()
 
-          const nope = aa.find( 'ancestor', current => current.value === 'nope' )
+          const nope = aa.ancestorNodes.find( current => current.value === 'nope' )
 
           assert.equal( nope, undefined )
         })
@@ -357,7 +357,7 @@ describe( 'Tree', () => {
         it( 'find', () => {
           const { root, a, aa } = testTree()
 
-          const target = root.find( 'bfs', current => current.value === 'a' )
+          const target = root.bfsNodes.find( current => current.value === 'a' )
 
           assert.deepEqual( target, a )
         })
@@ -365,7 +365,7 @@ describe( 'Tree', () => {
         it( 'non existent', () => {
           const { root, a, aa } = testTree()
 
-          const nope = root.find( 'bfs', current => current.value === 'nope' )
+          const nope = root.bfsNodes.find( current => current.value === 'nope' )
 
           assert.equal( nope, undefined )
         })
@@ -375,7 +375,7 @@ describe( 'Tree', () => {
         it( 'find', () => {
           const { root, a, aa } = testTree()
 
-          const target = root.find( 'child', current => current.value === 'a' )
+          const target = root.childNodes.find( current => current.value === 'a' )
 
           assert.deepEqual( target, a )
         })
@@ -383,95 +383,91 @@ describe( 'Tree', () => {
         it( 'non existent', () => {
           const { root, a, aa } = testTree()
 
-          const nope = aa.find( 'child', current => current.value === 'nope' )
+          const nope = aa.childNodes.find( current => current.value === 'nope' )
 
           assert.equal( nope, undefined )
         })
       })
     })
 
-    describe( 'findAll', () => {
-      describe( 'default (dfs)', () => {
-        it( 'findAll', () => {
+    describe( 'filter', () => {
+      describe( 'dfs', () => {
+        it( 'filter', () => {
           const { root, a, aa, ba, ca } = testTree()
 
-          const result = root.findAll( current => current.value.endsWith( 'a' ) )
+          const result = root.dfsNodes.filter( current => current.value.endsWith( 'a' ) )
 
-          assert.deepEqual( result, [ a, aa, ba, ca ] )
-        })
-
-        it( 'findAllDfs', () => {
-          const { root, a, aa, ba, ca } = testTree()
-
-          const result = root.findAllDfs( current => current.value.endsWith( 'a' ) )
-
-          assert.deepEqual( result, [ a, aa, ba, ca ] )
+          assert.deepEqual( result.toArray(), [ a, aa, ba, ca ] )
         })
 
         it( 'non existent', () => {
           const { root } = testTree()
 
-          const nope = root.findAll( current => current.value === 'nope' )
+          const nope = root.dfsNodes.filter( current => current.value === 'nope' )
 
-          assert.deepEqual( nope, [] )
+          assert.deepEqual( nope.toArray(), [] )
         })
       })
 
       describe( 'ancestor', () => {
-        it( 'findAll', () => {
+        it( 'filter', () => {
           const { root, a, aa, ba, ca } = testTree()
 
-          const result = aa.findAll( 'ancestor', current => current.value.endsWith( 'a' ) )
+          const result = aa.ancestorNodes.filter( current => current.value.endsWith( 'a' ) )
 
-          assert.deepEqual( result, [ a ] )
+          assert.deepEqual( result.toArray(), [ a ] )
         })
 
         it( 'non existent', () => {
           const { root, a, aa, ba, ca } = testTree()
 
-          const nope = aa.findAll( current => current.value === 'nope' )
+          const nope = aa.ancestorNodes.filter( current => current.value === 'nope' )
 
-          assert.deepEqual( nope, [] )
+          assert.deepEqual( nope.toArray(), [] )
         })
       })
 
       describe( 'bfs', () => {
-        it( 'findAll', () => {
+        it( 'filter', () => {
           const { root, a, b, aa, ab, ac, ba, bb, bc } = testTree()
 
-          const result = root.findAll( 'bfs', current =>
+          const result = root.bfsNodes.filter( current =>
             current.value.startsWith( 'a' ) || current.value.startsWith( 'b' )
           )
 
-          assert.deepEqual( result, [ a, b, aa, ab, ac, ba, bb, bc ] )
+          assert.deepEqual( result.toArray(), [ a, b, aa, ab, ac, ba, bb, bc ] )
         })
 
         it( 'non existent', () => {
           const { root } = testTree()
 
-          const nope = root.findAll( 'bfs', current => current.value === 'nope' )
+          const nope = root.bfsNodes.filter( current =>
+            current.value === 'nope'
+          )
 
-          assert.deepEqual( nope, [] )
+          assert.deepEqual( nope.toArray(), [] )
         })
       })
 
       describe( 'child', () => {
-        it( 'findAll', () => {
+        it( 'filter', () => {
           const { root, a, b } = testTree()
 
-          const result = root.findAll( 'child', current =>
+          const result = root.childNodes.filter( current =>
             current.value.startsWith( 'a' ) || current.value.startsWith( 'b' )
           )
 
-          assert.deepEqual( result, [ a, b ] )
+          assert.deepEqual( result.toArray(), [ a, b ] )
         })
 
         it( 'non existent', () => {
           const { root } = testTree()
 
-          const nope = root.findAll( 'child', current => current.value === 'nope' )
+          const nope = root.childNodes.filter( current =>
+            current.value === 'nope'
+          )
 
-          assert.deepEqual( nope, [] )
+          assert.deepEqual( nope.toArray(), [] )
         })
       })
     })
@@ -503,26 +499,17 @@ describe( 'Tree', () => {
       })
     })
 
-    describe( 'has', () => {
-      it( 'default (dfs)', () => {
+    describe( 'includes', () => {
+      it( 'dfs', () => {
         const { root, a } = testTree()
 
-        assert( root.has( a ) )
-        assert( !a.has( root ) )
+        assert( root.dfsNodes.includes( a ) )
       })
 
-      it( 'named (dfs)', () => {
+      it( 'non existent', () => {
         const { root, a } = testTree()
 
-        assert( root.has( 'dfs', a ) )
-        assert( !a.has( 'dfs', root ) )
-      })
-
-      it( 'hasDfs', () => {
-        const { root, a } = testTree()
-
-        assert( root.hasDfs( a ) )
-        assert( !a.hasDfs( root ) )
+        assert( !a.dfsNodes.includes( root ) )
       })
     })
 
@@ -570,11 +557,11 @@ describe( 'Tree', () => {
       assert.strictEqual( root.value, 'new value' )
     })
 
-    describe( 'childAt', () => {
+    describe( 'indexers', () => {
       it( 'no children', () => {
         const root = Tree( 'root' )
 
-        const childAt0 = root.childAt( 0 )
+        const childAt0 = root.childNodes[ 0 ]
 
         assert.strictEqual( childAt0, undefined )
       })
@@ -582,9 +569,9 @@ describe( 'Tree', () => {
       it( 'children and exists', () => {
         const { root, a, b, c } = testTree()
 
-        const childAt0 = root.childAt( 0 )
-        const childAt1 = root.childAt( 1 )
-        const childAt2 = root.childAt( 2 )
+        const childAt0 = root.childNodes[ 0 ]
+        const childAt1 = root.childNodes[ 1 ]
+        const childAt2 = root.childNodes[ 2 ]
 
         assert.strictEqual( childAt0, a )
         assert.strictEqual( childAt1, b )
@@ -594,7 +581,7 @@ describe( 'Tree', () => {
       it( 'children and does not exist', () => {
         const { root, a, b, c } = testTree()
 
-        const childAt3 = root.childAt( 3 )
+        const childAt3 = root.childNodes[ 3 ]
 
         assert.strictEqual( childAt3, undefined )
       })
@@ -634,7 +621,7 @@ describe( 'Tree', () => {
 
         const values = []
 
-        aa.ancestor( current => {
+        aa.ancestorNodes.forEach( current => {
           values.push( current.value )
         })
 
@@ -650,24 +637,23 @@ describe( 'Tree', () => {
 
         const values = []
 
-        aa.ancestor( current => {
+        for( let current of aa.ancestorNodes ){
           values.push( current.value )
 
-          return current === a
-        })
+          if( current === a ) break
+        }
 
         assert.deepEqual( expect, values )
       })
 
-      it( 'ancestor no callback', () => {
+      it( 'ancestor array', () => {
         const { root, a, aa } = testTree()
 
         const expect = [ a, root ]
 
-        const values = Array.from( aa.ancestor() )
+        const values = aa.ancestorNodes.toArray()
 
         assert.deepEqual( expect, values )
-        assert.deepEqual( expect, aa.getAncestor() )
       })
     })
 
@@ -681,7 +667,7 @@ describe( 'Tree', () => {
 
         const nodes = []
 
-        root.bfs( current => {
+        root.bfsNodes.forEach( current => {
           nodes.push( current )
         })
 
@@ -697,16 +683,16 @@ describe( 'Tree', () => {
 
         const values = []
 
-        root.bfs( current => {
+        for( let current of root.bfsNodes ){
           values.push( current.value )
 
-          return current === c
-        })
+          if( current === c ) break
+        }
 
         assert.deepEqual( expect, values )
       })
 
-      it( 'bfs no callback', () => {
+      it( 'bfs array', () => {
         const {
           root, a, b, c, aa, ab, ac, ba, bb, bc, ca, cb, cc
         } = testTree()
@@ -715,10 +701,9 @@ describe( 'Tree', () => {
           root, a, b, c, aa, ab, ac, ba, bb, bc, ca, cb, cc
         ]
 
-        const values = Array.from( root.bfs() )
+        const values = root.bfsNodes.toArray()
 
         assert.deepEqual( expect, values )
-        assert.deepEqual( expect, root.getBfs() )
       })
     })
 
@@ -730,7 +715,7 @@ describe( 'Tree', () => {
 
         const nodes = []
 
-        root.branch( current => {
+        root.branchNodes.forEach( current => {
           nodes.push( current )
         })
 
@@ -744,24 +729,23 @@ describe( 'Tree', () => {
 
         const nodes = []
 
-        root.branch( current => {
+        for( let current of root.branchNodes ){
           nodes.push( current )
 
-          return current === a
-        })
+          if( current === a ) break
+        }
 
         assert.deepEqual( expect, nodes )
       })
 
-      it( 'branch no callback', () => {
+      it( 'branch array', () => {
         const { root, a, b, c } = testTree()
 
         const expect = [ root, a, b, c ]
 
-        const values = Array.from( root.branch() )
+        const values = root.branchNodes.toArray()
 
         assert.deepEqual( expect, values )
-        assert.deepEqual( expect, root.getBranch() )
       })
     })
 
@@ -775,7 +759,7 @@ describe( 'Tree', () => {
 
         const values = []
 
-        root.child( current => {
+        root.childNodes.forEach( current => {
           values.push( current.value )
         })
 
@@ -791,57 +775,65 @@ describe( 'Tree', () => {
 
         const values = []
 
-        root.child( current => {
+        for( let current of root.childNodes ){
           values.push( current.value )
 
-          return current === b
+          if( current === b ) break
+        }
+
+        assert.deepEqual( expect, values )
+      })
+
+      it( 'child array', () => {
+        const { root, a, b, c } = testTree()
+
+        const expect = [ a, b, c ]
+
+        const values = root.childNodes.toArray()
+
+        assert.deepEqual( expect, values )
+      })
+
+      describe( 'multiple calls', () => {
+        const { root, a, b, c } = testTree()
+        const n = root.childNodes
+
+        const expect = [ a, b, c ]
+
+        it( 'calls once', () => {
+          const values = root.childNodes.toArray()
+
+          assert.deepEqual( expect, values )
         })
 
-        assert.deepEqual( expect, values )
-      })
+        it( 'calls twice', () => {
+          const values = root.childNodes.toArray()
 
-      it( 'child no callback', () => {
-        const { root, a, b, c } = testTree()
+          assert.deepEqual( expect, values )
+        })
 
-        const expect = [ a, b, c ]
+        it( 'finds', () => {
+          const result = root.childNodes.find( n => n.value === 'a' )
 
-        const values = Array.from( root.child() )
+          assert.deepEqual( result, a )
+        })
 
-        assert.deepEqual( expect, values )
-        assert.deepEqual( expect, root.getChild() )
-      })
+        it( 'from assignment once', () => {
+          const values = n.toArray()
 
+          assert.deepEqual( expect, values )
+        })
 
-      it( 'childNodes', () => {
-        const { root, a, b, c } = testTree()
+        it( 'from assignment twice', () => {
+          const values = n.toArray()
 
-        const expect = [ a, b, c ]
+          assert.deepEqual( expect, values )
+        })
 
-        let values = Array.from( root.childNodes )
-
-        assert.deepEqual( expect, values )
-
-        values = Array.from( root.childNodes )
-
-        assert.deepEqual( expect, values )
-
-        const result = root.childNodes.find( n => n.value === 'a' )
-
-        assert.deepEqual( result, a )
-
-        let n = root.childNodes
-
-        values = Array.from( n )
-
-        assert.deepEqual( expect, values )
-
-        values = Array.from( n )
-
-        assert.deepEqual( expect, values )
-
-        assert.deepEqual( root.childNodes[ 0 ], a )
-
-        assert.deepEqual( root.childNodes.length, 3 )
+        it( 'final check', () => {
+          assert.deepEqual( root.childNodes[ 0 ], a )
+          assert.deepEqual( root.childNodes.length, 3 )
+        })
       })
     })
 
@@ -856,7 +848,7 @@ describe( 'Tree', () => {
 
         const values = []
 
-        root.descendant( current => {
+        root.descendantNodes.forEach( current => {
           values.push( current.value )
         })
 
@@ -872,16 +864,16 @@ describe( 'Tree', () => {
 
         const values = []
 
-        root.descendant( current => {
+        for( let current of root.descendantNodes ){
           values.push( current.value )
 
-          return current === ac
-        })
+          if( current === ac ) break
+        }
 
         assert.deepEqual( expect, values )
       })
 
-      it( 'descendant no callback', () => {
+      it( 'descendant array', () => {
         const {
           root, a, aa, ab, ac, b, ba, bb, bc, c, ca, cb, cc
         } = testTree()
@@ -890,10 +882,9 @@ describe( 'Tree', () => {
           a, aa, ab, ac, b, ba, bb, bc, c, ca, cb, cc
         ]
 
-        const values = Array.from( root.descendant() )
+        const values = root.descendantNodes.toArray()
 
         assert.deepEqual( expect, values )
-        assert.deepEqual( expect, root.getDescendant() )
       })
     })
 
@@ -908,7 +899,7 @@ describe( 'Tree', () => {
 
         const values = []
 
-        root.dfs( current => {
+        root.dfsNodes.forEach( current => {
           values.push( current.value )
         })
 
@@ -924,16 +915,16 @@ describe( 'Tree', () => {
 
         const values = []
 
-        root.dfs( current => {
+        for( let current of root.dfsNodes ){
           values.push( current.value )
 
-          return current === ac
-        })
+          if( current === ac ) break
+        }
 
         assert.deepEqual( expect, values )
       })
 
-      it( 'dfs no callback', () => {
+      it( 'dfs array', () => {
         const {
           root, a, aa, ab, ac, b, ba, bb, bc, c, ca, cb, cc
         } = testTree()
@@ -942,10 +933,9 @@ describe( 'Tree', () => {
           root, a, aa, ab, ac, b, ba, bb, bc, c, ca, cb, cc
         ]
 
-        const values = Array.from( root.dfs() )
+        const values = root.dfsNodes.toArray()
 
         assert.deepEqual( expect, values )
-        assert.deepEqual( expect, root.getDfs() )
       })
     })
 
@@ -957,7 +947,7 @@ describe( 'Tree', () => {
 
         const nodes = []
 
-        root.leaf( current => {
+        root.leafNodes.forEach( current => {
           nodes.push( current )
         })
 
@@ -971,24 +961,23 @@ describe( 'Tree', () => {
 
         const nodes = []
 
-        root.leaf( current => {
+        for( let current of root.leafNodes ){
           nodes.push( current )
 
-          return current === ab
-        })
+          if( current === ab ) break
+        }
 
         assert.deepEqual( expect, nodes )
       })
 
-      it( 'leaf no callback', () => {
+      it( 'leaf array', () => {
         const { root, aa, ab, ac, ba, bb, bc, ca, cb, cc } = testTree()
 
         const expect = [ aa, ab, ac, ba, bb, bc, ca, cb, cc ]
 
-        const values = Array.from( root.leaf() )
+        const values = root.leafNodes.toArray()
 
         assert.deepEqual( expect, values )
-        assert.deepEqual( expect, root.getLeaf() )
       })
     })
 
@@ -1002,7 +991,7 @@ describe( 'Tree', () => {
 
         const values = []
 
-        aa.inclusiveAncestor( current => {
+        aa.inclusiveAncestorNodes.forEach( current => {
           values.push( current.value )
         })
 
@@ -1018,24 +1007,23 @@ describe( 'Tree', () => {
 
         const values = []
 
-        aa.inclusiveAncestor( current => {
+        for( let current of aa.inclusiveAncestorNodes ){
           values.push( current.value )
 
-          return current === a
-        })
+          if( current === a ) break
+        }
 
         assert.deepEqual( expect, values )
       })
 
-      it( 'inclusiveAncestor no callback', () => {
+      it( 'inclusiveAncestor array', () => {
         const { root, a, aa } = testTree()
 
         const expect = [ aa, a, root ]
 
-        const values = Array.from( aa.inclusiveAncestor() )
+        const values = aa.inclusiveAncestorNodes.toArray()
 
         assert.deepEqual( expect, values )
-        assert.deepEqual( expect, aa.getInclusiveAncestor() )
       })
     })
   })

@@ -34,6 +34,7 @@
   "dependencies": {
     "@mojule/api-factory": "github:mojule/api-factory#1.0.0",
     "@mojule/is": "^0.1.7",
+    "@mojule/list": "github:mojule/list",
     "@mojule/utils": "^0.1.13"
   }
 }

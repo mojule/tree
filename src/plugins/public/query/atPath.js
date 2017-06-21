@@ -11,7 +11,7 @@ const atPath = ({ api }) => {
       if( is.undefined( target ) )
         return
 
-      target = target.findChild( child => child.slug() === slug )
+      target = target.childNodes.find( child => child.slug() === slug )
     })
 
     return target
