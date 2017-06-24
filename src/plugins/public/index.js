@@ -33,6 +33,9 @@ const serializer = require( './serializer/serialize' )
 const clone = require( './functional/clone' )
 const map = require( './functional/map' )
 
+const objectNodeType = require( './object-value/nodeType' )
+const id = require( './object-value/id' )
+
 module.exports = [
   properties,
 
@@ -46,5 +49,7 @@ module.exports = [
 
   serializer,
 
-  clone, map
+  clone, map,
+
+  objectNodeType, id
 ]
