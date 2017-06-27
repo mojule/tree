@@ -1,6 +1,7 @@
 'use strict'
 
 const assert = require( 'assert' )
+const is = require( '@mojule/is' )
 const Tree = require( '../' )
 const testTree = require( './fixtures/test-tree' )
 const expect = require( './fixtures/expect' )
@@ -142,6 +143,56 @@ describe( 'Tree', () => {
 
       root.appendChild( first )
       assert.throws( () => root.insertBefore( last, middle ) )
+    })
+
+    describe( 'replaceChild', () => {
+      describe( 'first', () => {
+        const root = Tree( 'root' )
+        const first = Tree( 'first' )
+        const old = Tree( 'old' )
+        const middle = Tree( 'middle' )
+        const last = Tree( 'last' )
+
+        root.appendChild( old )
+        root.appendChild( middle )
+        root.appendChild( last )
+
+        root.replaceChild( old, first )
+
+        expectThreeChildren( root, first, middle, last )
+      })
+
+      describe( 'middle', () => {
+        const root = Tree( 'root' )
+        const old = Tree( 'old' )
+        const first = Tree( 'first' )
+        const middle = Tree( 'middle' )
+        const last = Tree( 'last' )
+
+        root.appendChild( first )
+        root.appendChild( old )
+        root.appendChild( last )
+
+        root.replaceChild( old, middle )
+
+        expectThreeChildren( root, first, middle, last )
+      })
+
+      describe( 'last', () => {
+        const root = Tree( 'root' )
+        const old = Tree( 'old' )
+        const first = Tree( 'first' )
+        const middle = Tree( 'middle' )
+        const last = Tree( 'last' )
+
+        root.appendChild( first )
+        root.appendChild( middle )
+        root.appendChild( old )
+
+        root.replaceChild( old, last )
+
+        expectThreeChildren( root, first, middle, last )
+      })
     })
 
     describe( 'remove', () => {
@@ -527,6 +578,24 @@ describe( 'Tree', () => {
         assert.equal( ab.index(), 1 )
         assert.equal( ac.index(), 2 )
       })
+    })
+
+    it( 'isBranch', () => {
+      const { root, a, aa, ab, ac, b, ba, bb, bc, c, ca, cb, cc } = testTree()
+
+      assert( root.isBranch() )
+      assert( a.isBranch() )
+      assert( b.isBranch() )
+      assert( c.isBranch() )
+      assert( !aa.isBranch() )
+      assert( !ab.isBranch() )
+      assert( !ac.isBranch() )
+      assert( !ba.isBranch() )
+      assert( !bb.isBranch() )
+      assert( !bc.isBranch() )
+      assert( !ca.isBranch() )
+      assert( !cb.isBranch() )
+      assert( !cc.isBranch() )
     })
 
     it( 'isLeaf', () => {
@@ -1025,6 +1094,268 @@ describe( 'Tree', () => {
 
         assert.deepEqual( expect, values )
       })
+    })
+
+    describe( 'nextSibling', () => {
+      it( 'nextSibling', () => {
+        const { a, b, c } = testTree()
+
+        const expect = [
+          'b', 'c'
+        ]
+
+        const values = []
+
+        a.nextSiblingNodes.forEach( current => {
+          values.push( current.value )
+        })
+
+        assert.deepEqual( expect, values )
+      })
+
+      it( 'nextSibling early return', () => {
+        const { a, b, c } = testTree()
+
+        const expect = [
+          'b'
+        ]
+
+        const values = []
+
+        for( let current of a.nextSiblingNodes ){
+          values.push( current.value )
+
+          if( current === b ) break
+        }
+
+        assert.deepEqual( expect, values )
+      })
+
+      it( 'nextSibling array', () => {
+        const { a, b, c } = testTree()
+
+        const expect = [ b, c ]
+
+        const values = a.nextSiblingNodes.toArray()
+
+        assert.deepEqual( expect, values )
+      })
+    })
+
+    describe( 'previousSibling', () => {
+      it( 'previousSibling', () => {
+        const { a, b, c } = testTree()
+
+        const expect = [
+          'b', 'a'
+        ]
+
+        const values = []
+
+        c.previousSiblingNodes.forEach( current => {
+          values.push( current.value )
+        })
+
+        assert.deepEqual( expect, values )
+      })
+
+      it( 'previousSibling early return', () => {
+        const { a, b, c } = testTree()
+
+        const expect = [
+          'b'
+        ]
+
+        const values = []
+
+        for( let current of c.previousSiblingNodes ){
+          values.push( current.value )
+
+          if( current === b ) break
+        }
+
+        assert.deepEqual( expect, values )
+      })
+
+      it( 'previousSibling array', () => {
+        const { a, b, c } = testTree()
+
+        const expect = [ b, a ]
+
+        const values = c.previousSiblingNodes.toArray()
+
+        assert.deepEqual( expect, values )
+      })
+    })
+
+    describe( 'sibling', () => {
+      it( 'sibling', () => {
+        const { a, b, c } = testTree()
+
+        const expect = [
+          'a', 'c'
+        ]
+
+        const values = []
+
+        b.siblingNodes.forEach( current => {
+          values.push( current.value )
+        })
+
+        assert.deepEqual( expect, values )
+      })
+
+      it( 'sibling early return', () => {
+        const { a, b, c } = testTree()
+
+        const expect = [
+          'b'
+        ]
+
+        const values = []
+
+        for( let current of a.siblingNodes ){
+          values.push( current.value )
+
+          if( current === b ) break
+        }
+
+        assert.deepEqual( expect, values )
+      })
+
+      it( 'sibling array', () => {
+        const { a, b, c } = testTree()
+
+        const expect = [ a, c ]
+
+        const values = b.siblingNodes.toArray()
+
+        assert.deepEqual( expect, values )
+      })
+
+      it( 'no siblings for root', () => {
+        const root = Tree( 'root' )
+
+        assert.deepEqual( root.siblingNodes.toArray(), [] )
+      })
+    })
+  })
+
+  describe( 'nodeType', () => {
+    it( 'non-object', () => {
+      const node = Tree( 'root' )
+
+      assert.strictEqual( node.nodeType, 'node' )
+    })
+
+    it( 'from meta', () => {
+      const node = Tree( 'root' )
+
+      node.meta.nodeType = 'element'
+
+      assert.strictEqual( node.nodeType, 'element' )
+    })
+
+    it( 'object with nodeType', () => {
+      const node = Tree({ nodeType: 'element' })
+
+      assert.strictEqual( node.nodeType, 'element' )
+    })
+
+    it( 'object without nodeType', () => {
+      const node = Tree({ a: 1 })
+
+      assert.strictEqual( node.nodeType, 'node' )
+    })
+
+    describe( 'registration', () => {
+      const plugins = {
+        privates: ({ privates }) => {
+          privates.registerNodeType({
+            name: 'empty',
+            isEmpty: true
+          })
+          privates.registerNodeType({
+            name: 'container',
+            isEmpty: false
+          })
+          privates.registerNodeType({
+            name: 'fooContainer',
+            isEmpty: false,
+            accepts: name => name === 'foo'
+          })
+          privates.registerNodeType({
+            name: 'foo',
+            isEmpty: true
+          })
+        },
+        api: ({ api, privates }) => {
+          api.createFooContainer = value => privates.createNode( 'fooContainer', value )
+          api.createFoo = value => privates.createNode( 'foo', value )
+          api.nodeTypes = () => privates.nodeTypes
+        }
+      }
+
+      const FooTree = Tree.Factory( plugins )
+
+      it( 'nodeTypes are registered', () => {
+        const root = FooTree( 'root' )
+
+        assert.deepEqual( root.nodeTypes(), [ 'empty', 'container', 'fooContainer', 'foo' ] )
+      })
+
+      it( 'empty', () => {
+        const empty = FooTree({ nodeType: 'empty' })
+        const container = FooTree({ nodeType: 'container' })
+        const fooContainer = FooTree({ nodeType: 'fooContainer' })
+        const foo = FooTree({ nodeType: 'foo' })
+
+        assert( empty.isEmpty() )
+        assert( foo.isEmpty() )
+        assert( !container.isEmpty() )
+        assert( !fooContainer.isEmpty() )
+      })
+
+      it( 'accepts', () => {
+        const empty = FooTree({ nodeType: 'empty' })
+        const container = FooTree({ nodeType: 'container' })
+        const fooContainer = FooTree({ nodeType: 'fooContainer' })
+        const foo = FooTree({ nodeType: 'foo' })
+
+        assert( !empty.accepts( container ) )
+        assert( container.accepts( empty ) )
+        assert( fooContainer.accepts( foo ) )
+        assert( !fooContainer.accepts( empty ) )
+      })
+
+      it( 'create', () => {
+        const root = FooTree()
+        const fooContainer = root.createFooContainer()
+
+        assert.strictEqual( fooContainer.nodeType, 'fooContainer' )
+      })
+    })
+  })
+
+  describe( 'object values', () => {
+    it( 'assign', () => {
+      const node = Tree( { a: 1 } )
+
+      node.assign( { b: 2 } )
+
+      assert.deepEqual( node.value, { a: 1, b: 2 } )
+    })
+
+    it( 'id', () => {
+      const node = Tree({ a: 1 })
+
+      const { id } = node
+
+      assert( is.string( id ) )
+      assert( id.startsWith( 'node-' ) )
+
+      assert.strictEqual( id, node.value.id )
+      assert.strictEqual( id, node.id )
     })
   })
 })

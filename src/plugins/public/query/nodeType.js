@@ -7,9 +7,11 @@ const nodeType = ({ api }) => {
     get: () => {
       if( is.object( api.meta ) && is.string( api.meta.nodeType ) )
         return api.meta.nodeType
-        
+
       return 'node'
-    }
+    },
+    enumerable: true,
+    configurable: true
   })
 }
 

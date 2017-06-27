@@ -1,7 +1,7 @@
 'use strict'
 
-const accepts = ({ api }) => {
-  api.accepts = child => !api.isEmpty()
+const accepts = ({ api, privates }) => {
+  api.accepts = child => privates.accepts( api.nodeType, child.nodeType )
 }
 
 module.exports = accepts
