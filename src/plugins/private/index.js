@@ -16,11 +16,15 @@ const sibling = require( './generators/sibling' )
 
 const nodeList = require( './nodeList' )
 
+const nodeType = require( './nodeType' )
+
 module.exports = [
   registerGenerator,
 
   ancestor, bfs, branch, child, descendant, dfs, inclusiveAncestor,
   inclusiveDescendant, leaf, nextSibling, previousSibling, sibling,
 
-  nodeList
+  nodeList,
+
+  nodeType
 ]

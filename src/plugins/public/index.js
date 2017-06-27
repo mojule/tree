@@ -28,13 +28,14 @@ const nodeType = require( './query/nodeType' )
 const root = require( './query/root' )
 const slug = require( './query/slug' )
 
+const assign = require( './query/object-value/assign' )
+const id = require( './query/object-value/id' )
+const objectNodeType = require( './query/object-value/nodeType' )
+
 const serializer = require( './serializer/serialize' )
 
 const clone = require( './functional/clone' )
 const map = require( './functional/map' )
-
-const objectNodeType = require( './object-value/nodeType' )
-const id = require( './object-value/id' )
 
 module.exports = [
   properties,
@@ -47,9 +48,9 @@ module.exports = [
   accepts, atPath, depth, getPath, index, isBranch, isEmpty, isLeaf, meta,
   nodeType, root, slug,
 
+  assign, id, objectNodeType,
+
   serializer,
 
-  clone, map,
-
-  objectNodeType, id
+  clone, map
 ]
