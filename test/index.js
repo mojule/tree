@@ -319,7 +319,7 @@ describe( 'Tree', () => {
 
       child.wrap( root )
 
-      assert.equal( child.root(), root )
+      assert.equal( child.rootNode, root )
       assert.equal( child.parentNode, root )
     })
   })
@@ -356,6 +356,21 @@ describe( 'Tree', () => {
 
         assert.strictEqual( root.atPath( '/3' ), undefined )
         assert.strictEqual( root.atPath( '/3/3' ), undefined )
+      })
+    })
+
+    describe( 'contains', () => {
+      it( 'exists', () => {
+        const { root, ac } = testTree()
+
+        assert( root.contains( ac ) )
+      })
+
+      it( 'does not exist', () => {
+        const { root, ac } = testTree()
+
+        assert( !root.contains( root ) )
+        assert( !ac.contains( root ) )
       })
     })
 
@@ -547,6 +562,20 @@ describe( 'Tree', () => {
 
         assert.throws( () => a.getPath( '0' ) )
         assert.throws( () => a.getPath( '' ) )
+      })
+    })
+
+    describe( 'hasChildNodes', () => {
+      it( 'has', () => {
+        const { root } = testTree()
+
+        assert( root.hasChildNodes() )
+      })
+
+      it( 'does not have', () => {
+        const { ac } = testTree()
+
+        assert( !ac.hasChildNodes() )
       })
     })
 
@@ -1337,6 +1366,34 @@ describe( 'Tree', () => {
     })
   })
 
+  describe( 'rootNode', () => {
+    it( 'is correct root', () => {
+      const { root, a, aa } = testTree()
+
+      assert.strictEqual( root, root.rootNode )
+      assert.strictEqual( root, a.rootNode )
+      assert.strictEqual( root, aa.rootNode )
+    })
+  })
+
+  describe( 'slug', () => {
+    it( 'is correct slug', () => {
+      const { root, a, aa } = testTree()
+
+      assert.strictEqual( root.slug(), '' )
+      assert.strictEqual( a.slug(), '0' )
+      assert.strictEqual( aa.slug(), '0' )
+    })
+  })
+
+  describe( 'treeName', () => {
+    it( 'is correct', () => {
+      const { root } = testTree()
+
+      assert.strictEqual( root.treeName, 'tree' )
+    })
+  })
+
   describe( 'object values', () => {
     it( 'assign', () => {
       const node = Tree( { a: 1 } )
@@ -1358,4 +1415,46 @@ describe( 'Tree', () => {
       assert.strictEqual( id, node.id )
     })
   })
+
+  describe( 'register properties', () => {
+    const plugins = {
+      api: ({ api, privates }) => {
+        privates.registerGet({
+          target: api,
+          name: 'propertyNames',
+          get: () => privates.propertyNames
+        })
+
+        let foo = true
+
+        privates.registerProperty({
+          target: api,
+          name: 'foo',
+          get: () => foo,
+          set: value => foo = value
+        })
+      }
+    }
+
+    const Tree2 = Tree.Factory( plugins )
+
+    it( 'read only', () => {
+      const root = Tree2( 'root' )
+
+      assert( is.array( root.propertyNames ) )
+      assert( root.propertyNames.includes( 'foo' ) )
+    })
+
+    it( 'property', () => {
+      const root = Tree2( 'root' )
+
+      assert.strictEqual( root.foo, true )
+
+      root.foo = false
+
+      assert.strictEqual( root.foo, false )
+    })
+  })
+
+
 })

@@ -4,7 +4,7 @@ const is = require( '@mojule/is' )
 
 const atPath = ({ api }) => {
   api.atPath = ( path, separator = '/' ) => {
-    let target = api.root()
+    let target = api.rootNode
     const slugs = path.split( separator ).filter( s => s !== '' )
 
     slugs.forEach( slug => {
