@@ -1241,50 +1241,50 @@ describe( 'Tree', () => {
     })
   })
 
-  describe( 'nodeType', () => {
+  describe( 'nodeName', () => {
     it( 'non-object', () => {
       const node = Tree( 'root' )
 
-      assert.strictEqual( node.nodeType, 'node' )
+      assert.strictEqual( node.nodeName, 'node' )
     })
 
     it( 'from meta', () => {
       const node = Tree( 'root' )
 
-      node.meta.nodeType = 'element'
+      node.meta.nodeName = 'element'
 
-      assert.strictEqual( node.nodeType, 'element' )
+      assert.strictEqual( node.nodeName, 'element' )
     })
 
-    it( 'object with nodeType', () => {
-      const node = Tree({ nodeType: 'element' })
+    it( 'object with nodeName', () => {
+      const node = Tree({ nodeName: 'element' })
 
-      assert.strictEqual( node.nodeType, 'element' )
+      assert.strictEqual( node.nodeName, 'element' )
     })
 
-    it( 'object without nodeType', () => {
+    it( 'object without nodeName', () => {
       const node = Tree({ a: 1 })
 
-      assert.strictEqual( node.nodeType, 'node' )
+      assert.strictEqual( node.nodeName, 'node' )
     })
 
     describe( 'registration', () => {
       const plugins = {
         privates: ({ privates }) => {
-          privates.registerNodeType({
+          privates.registerNodeName({
             name: 'empty',
             isEmpty: true
           })
-          privates.registerNodeType({
+          privates.registerNodeName({
             name: 'container',
             isEmpty: false
           })
-          privates.registerNodeType({
+          privates.registerNodeName({
             name: 'fooContainer',
             isEmpty: false,
             accepts: name => name === 'foo'
           })
-          privates.registerNodeType({
+          privates.registerNodeName({
             name: 'foo',
             isEmpty: true
           })
@@ -1292,23 +1292,23 @@ describe( 'Tree', () => {
         api: ({ api, privates }) => {
           api.createFooContainer = value => privates.createNode( 'fooContainer', value )
           api.createFoo = value => privates.createNode( 'foo', value )
-          api.nodeTypes = () => privates.nodeTypes
+          api.nodeNames = () => privates.nodeNames
         }
       }
 
       const FooTree = Tree.Factory( plugins )
 
-      it( 'nodeTypes are registered', () => {
+      it( 'nodeNames are registered', () => {
         const root = FooTree( 'root' )
 
-        assert.deepEqual( root.nodeTypes(), [ 'empty', 'container', 'fooContainer', 'foo' ] )
+        assert.deepEqual( root.nodeNames(), [ 'empty', 'container', 'fooContainer', 'foo' ] )
       })
 
       it( 'empty', () => {
-        const empty = FooTree({ nodeType: 'empty' })
-        const container = FooTree({ nodeType: 'container' })
-        const fooContainer = FooTree({ nodeType: 'fooContainer' })
-        const foo = FooTree({ nodeType: 'foo' })
+        const empty = FooTree({ nodeName: 'empty' })
+        const container = FooTree({ nodeName: 'container' })
+        const fooContainer = FooTree({ nodeName: 'fooContainer' })
+        const foo = FooTree({ nodeName: 'foo' })
 
         assert( empty.isEmpty() )
         assert( foo.isEmpty() )
@@ -1317,10 +1317,10 @@ describe( 'Tree', () => {
       })
 
       it( 'accepts', () => {
-        const empty = FooTree({ nodeType: 'empty' })
-        const container = FooTree({ nodeType: 'container' })
-        const fooContainer = FooTree({ nodeType: 'fooContainer' })
-        const foo = FooTree({ nodeType: 'foo' })
+        const empty = FooTree({ nodeName: 'empty' })
+        const container = FooTree({ nodeName: 'container' })
+        const fooContainer = FooTree({ nodeName: 'fooContainer' })
+        const foo = FooTree({ nodeName: 'foo' })
 
         assert( !empty.accepts( container ) )
         assert( container.accepts( empty ) )
@@ -1332,7 +1332,7 @@ describe( 'Tree', () => {
         const root = FooTree()
         const fooContainer = root.createFooContainer()
 
-        assert.strictEqual( fooContainer.nodeType, 'fooContainer' )
+        assert.strictEqual( fooContainer.nodeName, 'fooContainer' )
       })
     })
   })

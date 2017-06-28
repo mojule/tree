@@ -8,7 +8,9 @@ const nodes = ({ api, state, core, privates }) => {
     const fname = `${ name }Nodes`
     const list = privates.nodeList( generator )
 
-    Object.defineProperty( api, fname, {
+    privates.registerGet({
+      target: api,
+      name: fname,
       get: () => list
     })
   })

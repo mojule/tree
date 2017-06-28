@@ -5,17 +5,19 @@ const is = require( '@mojule/is' )
 
 const { id } = utils
 
-const nodeType = ({ api, state }) => {
+const nodeId = ({ api, state, privates }) => {
   if( !is.object( state.value ) ) return
 
-  Object.defineProperty( api, 'id', {
+  privates.registerGet({
+    target: api,
+    name: 'id',
     get: () => {
       if( !is.string( state.value.id ) )
-        state.value.id = id( api.nodeType )
+        state.value.id = id( api.nodeName.replace( /#/g, '' ) )
 
       return state.value.id
     }
   })
 }
 
-module.exports = nodeType
+module.exports = nodeId

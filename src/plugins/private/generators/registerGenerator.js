@@ -5,8 +5,10 @@ const registerGenerator = ({ privates }) => {
 
   privates.registerGenerator = name => generatorNames.add( name )
 
-  Object.defineProperty( privates, 'generatorNames', {
-    get: () => Array.from( generatorNames )
+  privates.registerGet({
+    target: privates,
+    name: 'generatorNames',
+    get: () =>  Array.from( generatorNames )
   })
 }
 

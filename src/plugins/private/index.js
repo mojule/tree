@@ -1,6 +1,8 @@
 'use strict'
 
+const registerProperty = require( './properties/registerProperty' )
 const registerGenerator = require( './generators/registerGenerator' )
+
 const ancestor = require( './generators/ancestor' )
 const bfs = require( './generators/bfs' )
 const branch = require( './generators/branch' )
@@ -16,15 +18,15 @@ const sibling = require( './generators/sibling' )
 
 const nodeList = require( './nodeList' )
 
-const nodeType = require( './nodeType' )
+const nodeName = require( './nodeName' )
 
 module.exports = [
-  registerGenerator,
+  registerProperty, registerGenerator,
 
   ancestor, bfs, branch, child, descendant, dfs, inclusiveAncestor,
   inclusiveDescendant, leaf, nextSibling, previousSibling, sibling,
 
   nodeList,
 
-  nodeType
+  nodeName
 ]
