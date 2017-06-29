@@ -1,5 +1,6 @@
 'use strict'
 
+// todo refactor out to new nodeType stuff
 const nodeName = ({ privates, Api }) => {
   const nodeNames = new Map()
 

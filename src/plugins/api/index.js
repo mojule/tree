@@ -2,16 +2,22 @@
 
 const properties = require( './properties' )
 
+const after = require( './manipulation/after' )
+const append = require( './manipulation/append' )
 const appendChild = require( './manipulation/appendChild' )
+const before = require( './manipulation/before' )
 const insertAfter = require( './manipulation/insertAfter' )
 const insertBefore = require( './manipulation/insertBefore' )
+const prepend = require( './manipulation/prepend' )
 const prependChild = require( './manipulation/prependChild' )
 const remove = require( './manipulation/remove' )
 const removeAll = require( './manipulation/removeAll' )
 const removeChild = require( './manipulation/removeChild' )
 const replaceChild = require( './manipulation/replaceChild' )
+const replaceWith = require( './manipulation/replaceWith' )
 const unwrap = require( './manipulation/unwrap' )
 const wrap = require( './manipulation/wrap' )
+const wrapInner = require( './manipulation/wrapInner' )
 
 const nodes = require( './traversal/nodes' )
 
@@ -43,8 +49,9 @@ const map = require( './functional/map' )
 module.exports = [
   properties,
 
-  appendChild, insertAfter, insertBefore, prependChild, remove, removeAll,
-  removeChild, replaceChild, unwrap, wrap,
+  after, append, appendChild, before, insertAfter, insertBefore, prepend,
+  prependChild, remove, removeAll, removeChild, replaceChild, replaceWith,
+  unwrap, wrap, wrapInner,
 
   nodes,
 

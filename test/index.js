@@ -30,6 +30,53 @@ describe( 'Tree', () => {
   })
 
   describe( 'manipulation', () => {
+    describe( 'after to middle', () => {
+      const root = Tree( 'root' )
+      const first = Tree( 'first' )
+      const middle = Tree( 'middle' )
+      const last = Tree( 'last' )
+
+      root.appendChild( first )
+      root.appendChild( last )
+
+      first.after( middle )
+
+      expectThreeChildren( root, first, middle, last )
+    })
+
+    describe( 'after to end', () => {
+      const root = Tree( 'root' )
+      const first = Tree( 'first' )
+      const middle = Tree( 'middle' )
+      const last = Tree( 'last' )
+
+      root.appendChild( first )
+      root.appendChild( middle )
+
+      middle.after( last )
+
+      expectThreeChildren( root, first, middle, last )
+    })
+
+    describe( 'bad after', () => {
+      const root = Tree( 'root' )
+      const first = Tree( 'first' )
+
+      assert.throws( () => root.after( first ) )
+    })
+
+    describe( 'append', () => {
+      const root = Tree( 'root' )
+      const first = Tree( 'first' )
+      const middle = Tree( 'middle' )
+      const last = Tree( 'last' )
+
+      root.appendChild( first )
+      root.append( middle, last )
+
+      expectThreeChildren( root, first, middle, last )
+    })
+
     describe( 'appendChild to empty node', () => {
       const root = Tree( 'root' )
       const first = Tree( 'first' )
@@ -48,6 +95,53 @@ describe( 'Tree', () => {
       root.appendChild( last )
 
       expectTwoChildren( root, first, last )
+    })
+
+    describe( 'before to middle', () => {
+      const root = Tree( 'root' )
+      const first = Tree( 'first' )
+      const middle = Tree( 'middle' )
+      const last = Tree( 'last' )
+
+      root.appendChild( first )
+      root.appendChild( last )
+
+      last.before( middle )
+
+      expectThreeChildren( root, first, middle, last )
+    })
+
+    describe( 'before to start', () => {
+      const root = Tree( 'root' )
+      const first = Tree( 'first' )
+      const middle = Tree( 'middle' )
+      const last = Tree( 'last' )
+
+      root.appendChild( middle )
+      root.appendChild( last )
+
+      middle.before( first )
+
+      expectThreeChildren( root, first, middle, last )
+    })
+
+    describe( 'bad before', () => {
+      const root = Tree( 'root' )
+      const first = Tree( 'first' )
+
+      assert.throws( () => root.before( first ) )
+    })
+
+    describe( 'prepend', () => {
+      const root = Tree( 'root' )
+      const first = Tree( 'first' )
+      const middle = Tree( 'middle' )
+      const last = Tree( 'last' )
+
+      root.appendChild( last )
+      root.prepend( first, middle )
+
+      expectThreeChildren( root, first, middle, last )
     })
 
     describe( 'prependChild to empty node', () => {
@@ -195,6 +289,24 @@ describe( 'Tree', () => {
       })
     })
 
+    describe( 'replaceWith', () => {
+      const root = Tree( 'root' )
+      const old = Tree( 'old' )
+      const first = Tree( 'first' )
+      const middle = Tree( 'middle' )
+      const last = Tree( 'last' )
+
+      root.appendChild( old )
+
+      old.replaceWith( first, middle, last )
+
+      expectThreeChildren( root, first, middle, last )
+
+      it( 'bad replaceWith', () => {
+        assert.throws( () => root.replaceWith( old ) )
+      })
+    })
+
     describe( 'remove', () => {
       const root = Tree( 'root' )
       const first = Tree( 'first' )
@@ -321,6 +433,20 @@ describe( 'Tree', () => {
 
       assert.equal( child.rootNode, root )
       assert.equal( child.parentNode, root )
+    })
+
+    it( 'wrap inner', () => {
+      const { root, a, aa, ab, ac } = testTree()
+      const aWrapper = Tree( 'a wrapper' )
+
+      a.wrapInner( aWrapper )
+
+      assert.strictEqual( aWrapper.parentNode, a )
+      assert.strictEqual( a.firstChild, aWrapper )
+      assert.strictEqual( a.lastChild, aWrapper )
+      assert.strictEqual( aa.parentNode, aWrapper )
+      assert.strictEqual( ab.parentNode, aWrapper )
+      assert.strictEqual( ac.parentNode, aWrapper )
     })
   })
 
