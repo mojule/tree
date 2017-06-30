@@ -1531,6 +1531,22 @@ describe( 'Tree', () => {
           assert( !empty.accepts( container ) )
         })
 
+        it( 'should throw when appendChild', () => {
+          assert.throws( () => empty.appendChild( container ) )
+        })
+
+        it( 'should throw when insertAfter', () => {
+          assert.throws( () => empty.insertAfter( container ) )
+        })
+
+        it( 'should throw when insertBefore', () => {
+          assert.throws( () => empty.insertBefore( container ) )
+        })
+
+        it( 'should throw when prependChild', () => {
+          assert.throws( () => empty.prependChild( container ) )
+        })
+
         it( 'should not accept because predicate', () => {
           assert( !fooContainer.accepts( empty ) )
         })

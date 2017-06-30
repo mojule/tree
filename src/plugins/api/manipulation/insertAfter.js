@@ -1,7 +1,12 @@
 'use strict'
 
+const HierarchyError = require( './hierarchyError' )
+
 const insertAfter = ({ api, state, core }) => {
   api.insertAfter = ( child, reference ) => {
+    if( !api.accepts( child ) )
+      throw HierarchyError( api.nodeName, child.nodeName )
+
     if( reference === undefined )
       return api.appendChild( child )
 
