@@ -1,7 +1,7 @@
 'use strict'
 
-const rootNode = ({ api, privates }) => {
-  privates.registerGet({
+const rootNode = ({ api, core }) => {
+  core.registerProperty({
     target: api,
     name: 'rootNode',
     get: () => api.inclusiveAncestorNodes.find( current =>

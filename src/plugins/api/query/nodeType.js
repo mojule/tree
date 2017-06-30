@@ -2,13 +2,8 @@
 
 const is = require( '@mojule/is' )
 
-const nodeType = ({ api, privates }) => {
-  privates.registerNodeType({
-    nodeType: 0,
-    nodeName: '#node'
-  })
-
-  privates.registerGet({
+const nodeType = ({ api, core, privates }) => {
+  core.registerProperty({
     target: api,
     name: 'nodeType',
     get: () => 0

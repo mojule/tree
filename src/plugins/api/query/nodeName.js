@@ -2,11 +2,11 @@
 
 const is = require( '@mojule/is' )
 
-const nodeName = ({ api, privates }) => {
-  privates.registerGet({
+const nodeName = ({ api, core }) => {
+  core.registerProperty({
     target: api,
     name: 'nodeName',
-    get: () => privates.getNodeName( api.nodeType )
+    get: () => '#' + core.getNodeTypeName( api.nodeType )
   })
 }
 

@@ -1,11 +1,11 @@
 'use strict'
 
-const registerGenerator = ({ privates }) => {
+const registerGenerator = ({ privates, core }) => {
   const generatorNames = new Set()
 
   privates.registerGenerator = name => generatorNames.add( name )
 
-  privates.registerGet({
+  core.registerProperty({
     target: privates,
     name: 'generatorNames',
     get: () =>  Array.from( generatorNames )

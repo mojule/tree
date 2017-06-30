@@ -1396,98 +1396,186 @@ describe( 'Tree', () => {
     })
   })
 
-  describe( 'nodeName', () => {
-    it( 'non-object', () => {
+  describe( 'nodeType', () => {
+    it( 'default nodeName', () => {
       const node = Tree( 'root' )
 
-      assert.strictEqual( node.nodeName, 'node' )
-    })
-
-    it( 'from meta', () => {
-      const node = Tree( 'root' )
-
-      node.meta.nodeName = 'element'
-
-      assert.strictEqual( node.nodeName, 'element' )
-    })
-
-    it( 'object with nodeName', () => {
-      const node = Tree({ nodeName: 'element' })
-
-      assert.strictEqual( node.nodeName, 'element' )
-    })
-
-    it( 'object without nodeName', () => {
-      const node = Tree({ a: 1 })
-
-      assert.strictEqual( node.nodeName, 'node' )
+      assert.strictEqual( node.nodeName, '#node' )
     })
 
     describe( 'registration', () => {
       const plugins = {
-        privates: ({ privates }) => {
-          privates.registerNodeName({
+        core: ({ core }) => {
+          core.registerNodeType({
+            nodeType: 20,
             name: 'empty',
-            isEmpty: true
+            isEmpty: () => true
           })
-          privates.registerNodeName({
+          core.registerNodeType({
+            nodeType: 21,
             name: 'container',
-            isEmpty: false
+            isEmpty: () => false
           })
-          privates.registerNodeName({
-            name: 'fooContainer',
-            isEmpty: false,
-            accepts: name => name === 'foo'
+          core.registerNodeType({
+            nodeType: 22,
+            name: 'foo-container',
+            isEmpty: () => false,
+            accepts: ( parent, child ) => child.nodeName === '#foo'
           })
-          privates.registerNodeName({
+          core.registerNodeType({
+            nodeType: 23,
             name: 'foo',
-            isEmpty: true
+            isEmpty: node => true
           })
         },
-        api: ({ api, privates }) => {
-          api.createFooContainer = value => privates.createNode( 'fooContainer', value )
-          api.createFoo = value => privates.createNode( 'foo', value )
-          api.nodeNames = () => privates.nodeNames
+        api: ({ api, core }) => {
+          api.nodeTypes = () => core.nodeTypes
+          api.createWithAge = age => core.createNode( 1001, { age } )
+          api.badCreate = () => core.createNode( true )
         }
       }
 
       const FooTree = Tree.Factory( plugins )
 
-      it( 'nodeNames are registered', () => {
+      it( 'createNode unregistered', () => {
+        const root = FooTree( 'root' )
+        const age = root.createWithAge( 42 )
+
+        assert.strictEqual( age.nodeType, 1001 )
+        assert.strictEqual( age.value.age, 42 )
+      })
+
+      it( 'bad createNode', () => {
         const root = FooTree( 'root' )
 
-        assert.deepEqual( root.nodeNames(), [ 'empty', 'container', 'fooContainer', 'foo' ] )
+        assert.throws( () => root.badCreate() )
       })
 
-      it( 'empty', () => {
-        const empty = FooTree({ nodeName: 'empty' })
-        const container = FooTree({ nodeName: 'container' })
-        const fooContainer = FooTree({ nodeName: 'fooContainer' })
-        const foo = FooTree({ nodeName: 'foo' })
+      it( 'creates nodeTypes', () => {
+        const empty = FooTree.createEmpty()
+        const container = FooTree.createContainer()
+        const fooContainer = FooTree.createFooContainer()
+        const foo = FooTree.createFoo()
 
-        assert( empty.isEmpty() )
-        assert( foo.isEmpty() )
-        assert( !container.isEmpty() )
-        assert( !fooContainer.isEmpty() )
+        assert.strictEqual( empty.nodeType, FooTree.EMPTY_NODE )
+        assert.strictEqual( container.nodeType, FooTree.CONTAINER_NODE )
+        assert.strictEqual( fooContainer.nodeType, FooTree.FOO_CONTAINER_NODE )
+        assert.strictEqual( foo.nodeType, FooTree.FOO_NODE )
       })
 
-      it( 'accepts', () => {
-        const empty = FooTree({ nodeName: 'empty' })
-        const container = FooTree({ nodeName: 'container' })
-        const fooContainer = FooTree({ nodeName: 'fooContainer' })
-        const foo = FooTree({ nodeName: 'foo' })
+      it( 'nodeTypes are registered', () => {
+        const root = FooTree( 'root' )
+        const nodeTypes = root.nodeTypes()
+        const names = Object.keys( nodeTypes ).sort()
 
-        assert( !empty.accepts( container ) )
-        assert( container.accepts( empty ) )
-        assert( fooContainer.accepts( foo ) )
-        assert( !fooContainer.accepts( empty ) )
+        assert.deepEqual( names, [ 'container', 'empty', 'foo', 'foo-container', 'node' ] )
       })
 
-      it( 'create', () => {
-        const root = FooTree()
-        const fooContainer = root.createFooContainer()
+      describe( 'empty', () => {
+        const empty = FooTree({ nodeType: FooTree.EMPTY_NODE })
+        const container = FooTree({ nodeType: FooTree.CONTAINER_NODE })
+        const fooContainer = FooTree({ nodeType: FooTree.FOO_CONTAINER_NODE })
+        const foo = FooTree({ nodeType: FooTree.FOO_NODE })
 
-        assert.strictEqual( fooContainer.nodeName, 'fooContainer' )
+        it( 'should be empty', () => {
+          assert( empty.isEmpty() )
+          assert( foo.isEmpty() )
+        })
+
+        it( 'should not be empty', () => {
+          assert( !container.isEmpty() )
+          assert( !fooContainer.isEmpty() )
+        })
+
+        it( 'default empty', () => {
+          const nonRegistered = FooTree({ nodeType: 1000 })
+
+          assert( !nonRegistered.isEmpty() )
+        })
+      })
+
+      describe( 'accepts', () => {
+        const empty = FooTree({ nodeType: FooTree.EMPTY_NODE })
+        const container = FooTree({ nodeType: FooTree.CONTAINER_NODE })
+        const fooContainer = FooTree({ nodeType: FooTree.FOO_CONTAINER_NODE })
+        const foo = FooTree({ nodeType: FooTree.FOO_NODE })
+
+        it( 'should accept because not empty', () => {
+          assert( container.accepts( empty ) )
+        })
+
+        it( 'should accept because predicate', () => {
+          assert( fooContainer.accepts( foo ) )
+        })
+
+        it( 'should not accept because empty', () => {
+          assert( !empty.accepts( container ) )
+        })
+
+        it( 'should not accept because predicate', () => {
+          assert( !fooContainer.accepts( empty ) )
+        })
+
+        it( 'default non registered', () => {
+          const parent = FooTree({ nodeType: 1000 })
+          const child = FooTree({ nodeType: 1001 })
+
+          assert( parent.accepts( child ) )
+        })
+      })
+
+      describe( 'bad registerNodeType', () => {
+        it( 'non integer nodeType', () => {
+          const plugins = {
+            core: ({ core }) => {
+              core.registerNodeType({
+                nodeType: '20',
+                name: 'empty'
+              })
+            }
+          }
+
+          assert.throws( () => Tree.Factory( plugins ) )
+        })
+
+        it( 'non string name', () => {
+          const plugins = {
+            core: ({ core }) => {
+              core.registerNodeType({
+                nodeType: 20,
+                name: 20
+              })
+            }
+          }
+
+          assert.throws( () => Tree.Factory( plugins ) )
+        })
+
+        it( 'duplicate node type', () => {
+          const plugins = {
+            core: ({ core }) => {
+              core.registerNodeType({
+                nodeType: 0,
+                name: 'nope'
+              })
+            }
+          }
+
+          assert.throws( () => Tree.Factory( plugins ) )
+        })
+
+        it( 'duplicate name', () => {
+          const plugins = {
+            core: ({ core }) => {
+              core.registerNodeType({
+                nodeType: 1000,
+                name: 'node'
+              })
+            }
+          }
+
+          assert.throws( () => Tree.Factory( plugins ) )
+        })
       })
     })
   })
@@ -1544,16 +1632,16 @@ describe( 'Tree', () => {
 
   describe( 'register properties', () => {
     const plugins = {
-      api: ({ api, privates }) => {
-        privates.registerGet({
+      api: ({ api, core }) => {
+        core.registerProperty({
           target: api,
           name: 'propertyNames',
-          get: () => privates.propertyNames
+          get: () => core.propertyNames
         })
 
         let foo = true
 
-        privates.registerProperty({
+        core.registerProperty({
           target: api,
           name: 'foo',
           get: () => foo,

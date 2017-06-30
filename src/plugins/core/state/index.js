@@ -1,6 +1,6 @@
 'use strict'
 
-const core = ({ core }) => {
+const state = ({ core }) => {
   core.createState = value => ({
     parentNode: undefined,
     previousSibling: undefined,
@@ -11,4 +11,4 @@ const core = ({ core }) => {
   })
 }
 
-module.exports = [ core ]
+module.exports = state

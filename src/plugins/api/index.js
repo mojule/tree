@@ -33,13 +33,14 @@ const isEmpty = require( './query/isEmpty' )
 const isLeaf = require( './query/isLeaf' )
 const meta = require( './query/meta' )
 const nodeName = require( './query/nodeName' )
+const nodeType = require( './query/nodeType' )
 const treeName = require( './query/treeName' )
 const rootNode = require( './query/rootNode' )
 const slug = require( './query/slug' )
 
 const assign = require( './query/object-value/assign' )
 const id = require( './query/object-value/id' )
-const objectNodeName = require( './query/object-value/nodeName' )
+const objectNodeType = require( './query/object-value/nodeType' )
 
 const serializer = require( './serializer/serialize' )
 
@@ -56,9 +57,9 @@ module.exports = [
   nodes,
 
   accepts, atPath, contains, depth, getPath, hasChildNodes, index, isBranch,
-  isEmpty, isLeaf, meta, nodeName, treeName, rootNode, slug,
+  isEmpty, isLeaf, meta, nodeName, nodeType, treeName, rootNode, slug,
 
-  assign, id, objectNodeName,
+  assign, id, objectNodeType,
 
   serializer,
 

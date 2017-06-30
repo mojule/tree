@@ -5,10 +5,10 @@ const is = require( '@mojule/is' )
 
 const { id } = utils
 
-const nodeId = ({ api, state, privates }) => {
+const nodeId = ({ api, state, core, privates }) => {
   if( !is.object( state.value ) ) return
 
-  privates.registerGet({
+  core.registerProperty({
     target: api,
     name: 'id',
     get: () => {

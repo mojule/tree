@@ -1,7 +1,12 @@
 'use strict'
 
-const accepts = ({ api, privates }) => {
-  api.accepts = child => privates.accepts( api.nodeName, child.nodeName )
+const accepts = ({ api, state, core }) => {
+  api.accepts = child => {
+    const { getApi, accepts } = core
+    const node = getApi( state )
+
+    return accepts( node, child )
+  }
 }
 
 module.exports = accepts

@@ -6,9 +6,9 @@ const nodes = ({ api, state, core, privates }) => {
   privates.generatorNames.forEach( name => {
     const generator = privates[ name ]
     const fname = `${ name }Nodes`
-    const list = privates.nodeList( generator )
+    const list = core.nodeList( generator )
 
-    privates.registerGet({
+    core.registerProperty({
       target: api,
       name: fname,
       get: () => list
