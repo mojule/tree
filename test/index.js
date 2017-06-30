@@ -1463,6 +1463,23 @@ describe( 'Tree', () => {
         assert.strictEqual( foo.nodeType, FooTree.FOO_NODE )
       })
 
+      it( 'creates is nodeType', () => {
+        const empty = FooTree.createEmpty()
+        const container = FooTree.createContainer()
+        const fooContainer = FooTree.createFooContainer()
+        const foo = FooTree.createFoo()
+
+        assert( empty.isEmptyNode() )
+        assert( container.isContainerNode() )
+        assert( fooContainer.isFooContainerNode() )
+        assert( foo.isFooNode() )
+
+        assert( !empty.isNodeNode() )
+        assert( !container.isNodeNode() )
+        assert( !fooContainer.isNodeNode() )
+        assert( !foo.isNodeNode() )
+      })
+
       it( 'nodeTypes are registered', () => {
         const root = FooTree( 'root' )
         const nodeTypes = root.nodeTypes()
