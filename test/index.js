@@ -1425,7 +1425,8 @@ describe( 'Tree', () => {
           core.registerNodeType({
             nodeType: 23,
             name: 'foo',
-            isEmpty: node => true
+            isEmpty: node => true,
+            create: bar => ({ bar })
           })
         },
         api: ({ api, core }) => {
@@ -1455,15 +1456,16 @@ describe( 'Tree', () => {
         const empty = FooTree.createEmpty()
         const container = FooTree.createContainer()
         const fooContainer = FooTree.createFooContainer()
-        const foo = FooTree.createFoo()
+        const foo = FooTree.createFoo( 'baz' )
 
         assert.strictEqual( empty.nodeType, FooTree.EMPTY_NODE )
         assert.strictEqual( container.nodeType, FooTree.CONTAINER_NODE )
         assert.strictEqual( fooContainer.nodeType, FooTree.FOO_CONTAINER_NODE )
         assert.strictEqual( foo.nodeType, FooTree.FOO_NODE )
+        assert.strictEqual( foo.value.bar, 'baz' )
       })
 
-      it( 'creates is nodeType', () => {
+      it( 'is nodeType', () => {
         const empty = FooTree.createEmpty()
         const container = FooTree.createContainer()
         const fooContainer = FooTree.createFooContainer()

@@ -75,8 +75,11 @@ const nodeType = ({ core, Api }) => {
   core.createNode = ( id, ...args ) => {
     const nodeType = idToNodeType( id )
 
-    if( nodeTypes.has( nodeType ) )
-      return nodeTypes.get( nodeType ).create( ...args )
+    if( nodeTypes.has( nodeType ) ){
+      const value = nodeTypes.get( nodeType ).create( ...args )
+
+      return defaultCreate( nodeType, value )
+    }
 
     return defaultCreate( nodeType, ...args )
   }
