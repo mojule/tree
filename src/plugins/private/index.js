@@ -14,10 +14,11 @@ const leaf = require( './generators/leaf' )
 const nextSibling = require( './generators/nextSibling' )
 const previousSibling = require( './generators/previousSibling' )
 const sibling = require( './generators/sibling' )
+const sub = require( './generators/sub' )
 
 module.exports = [
   registerGenerator,
 
   ancestor, bfs, branch, child, descendant, dfs, inclusiveAncestor,
-  inclusiveDescendant, leaf, nextSibling, previousSibling, sibling
+  inclusiveDescendant, leaf, nextSibling, previousSibling, sibling, sub
 ]
