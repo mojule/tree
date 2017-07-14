@@ -16,6 +16,9 @@ const insertAfter = ({ api, state, core }) => {
     if( referenceState.parentNode !== state )
       throw Error( 'Reference node is not a child of the current node' )
 
+    if( child.parentNode )
+      child.parentNode.removeChild( child )
+
     const childState = getState( child )
 
     childState.parentNode = state

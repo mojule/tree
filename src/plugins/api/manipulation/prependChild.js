@@ -9,6 +9,9 @@ const prependChild = ({ api, state, core }) => {
 
     const { getState, getApi } = core
 
+    if( child.parentNode )
+      child.parentNode.removeChild( child )
+
     if( state.firstChild )
       return api.insertBefore( child, getApi( state.firstChild ) )
 

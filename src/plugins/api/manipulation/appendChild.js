@@ -10,6 +10,9 @@ const appendChild = ({ api, state, core }) => {
     const { getState, getApi } = core
     const childState = getState( child )
 
+    if( child.parentNode )
+      child.parentNode.removeChild( child )
+
     if( state.lastChild )
       return api.insertAfter( child, getApi( state.lastChild ) )
 
