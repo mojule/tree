@@ -1,7 +1,8 @@
 'use strict'
 
-const idModule = require( './id' )
-const valueModule = require( './value' )
-const nodeTypeModule = require( './nodeType' )
+const core = require( './core' )
+const statics = require( './static' )
+const api = require( './api' )
+const privates = require( './private' )
 
-module.exports = [ idModule, valueModule, nodeTypeModule ]
+module.exports = { core, statics, api, privates }
